@@ -109,17 +109,170 @@
             padding-top: 1.5rem;
             border-top: 1px solid rgba(99,102,241,0.1);
         }
-        .upload-zone {
-            border: 2px dashed rgba(99, 102, 241, 0.3);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: var(--darker);
+
+        /* ====== BIOMETRIC SCANNER ====== */
+        .bio-scanner-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
         }
-        .upload-zone:hover { border-color: var(--primary); background: rgba(99,102,241,0.05); }
-        .upload-zone input { display: none; }
+        .scanner-box {
+            background: var(--darker);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s;
+        }
+        .scanner-box:hover { border-color: var(--primary); }
+        .scanner-box.completed { border-color: var(--neon-green); }
+        .scanner-icon {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .scanner-title {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .scanner-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .scan-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            animation: scanPulse 2s infinite;
+            display: none;
+        }
+        .scan-line-vert {
+            position: absolute;
+            left: 50%;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, transparent, var(--neon-green), transparent);
+            transform: translateX(-50%);
+            display: none;
+            animation: scanLine 2s ease-in-out infinite;
+        }
+        .scan-progress {
+            width: 100%;
+            height: 6px;
+            background: var(--darker);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        .scan-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--neon-green));
+            transition: width 0.3s;
+            border-radius: 3px;
+        }
+        .scan-status {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+        .scan-status.complete { color: var(--neon-green); }
+        .scan-status.scanning { color: var(--primary-glow); }
+
+        /* Face scanner specific */
+        .face-frame {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            border: 3px dashed rgba(99, 102, 241, 0.4);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .face-frame.scanning { border-color: var(--neon-green); border-style: solid; }
+        .face-frame.completed { border-color: var(--neon-green); background: rgba(0,255,136,0.1); }
+        .face-grid {
+            position: absolute;
+            inset: 0;
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+        .face-grid-line {
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        /* Fingerprint specific */
+        .fp-pad {
+            width: 100px; height: 120px;
+            border-radius: 50% 50% 40% 40%;
+            background: rgba(99, 102, 241, 0.1);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            border: 3px dashed rgba(99, 102, 241, 0.4);
+        }
+        .fp-pad.scanning { border-color: var(--neon-green); border-style: solid; }
+        .fp-pad.completed { border-color: var(--neon-green); background: rgba(0,255,136,0.1); }
+        .fp-ridges {
+            position: absolute;
+            inset: 10px;
+            border-radius: 50%;
+            display: none;
+            overflow: hidden;
+        }
+        .fp-ridge {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            border-radius: 50%;
+        }
+
+        @keyframes scanPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 0.4; }
+        }
+        @keyframes scanLine {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* TSMID specific fields */
+        .tsmid-fields { display: none; }
+        .tsmid-fields.show { display: block; animation: fadeIn 0.3s ease; }
+        .guardian-notice {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--neon-green);
+        }
+        .guardian-notice strong { display: block; margin-bottom: 0.3rem; }
+
         .success-check {
             width: 80px; height: 80px;
             border-radius: 50%;
@@ -146,9 +299,11 @@
         .review-row:last-child { border-bottom: none; }
         .review-label { color: var(--text-muted); font-size: 0.9rem; }
         .review-value { font-weight: 600; }
+
         @media (max-width: 768px) {
             .reg-wizard { padding: 1.5rem; }
             .category-grid { grid-template-columns: 1fr; }
+            .bio-scanner-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -223,7 +378,7 @@
                     </div>
                     <div class="reg-step" data-step="3">
                         <div class="step-num">3</div>
-                        <div class="step-label">Verify</div>
+                        <div class="step-label">Biometric</div>
                     </div>
                     <div class="reg-step" data-step="4">
                         <div class="step-num">4</div>
@@ -231,7 +386,7 @@
                     </div>
                 </div>
 
-                <!-- Step 1: Category Selection -->
+                <!-- ====== STEP 1: CATEGORY ====== -->
                 <div class="reg-panel active" id="step-1">
                     <h3 style="text-align:center;margin-bottom:0.5rem;">Select Your Category</h3>
                     <p style="text-align:center;color:var(--text-muted);margin-bottom:1.5rem;font-size:0.9rem;">Each category has specific verification requirements tailored to your needs.</p>
@@ -267,79 +422,175 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Personal Details -->
+                <!-- ====== STEP 2: PERSONAL DETAILS ====== -->
                 <div class="reg-panel" id="step-2">
                     <h3 style="text-align:center;margin-bottom:1.5rem;">Your Information</h3>
+
+                    <!-- TSMID Guardian Notice -->
+                    <div class="tsmid-fields" id="tsmidNotice">
+                        <div class="guardian-notice">
+                            <strong>👨‍👩‍👧 Parent/Guardian Required</strong>
+                            TSMID applicants (ages 13-17) must provide parent or guardian information and consent for verification.
+                        </div>
+                    </div>
+
+                    <!-- TSMID: Parent/Guardian Fields -->
+                    <div class="tsmid-fields" id="tsmidGuardianFields">
+                        <h4 style="color:var(--neon-green);margin-bottom:1rem;font-size:0.95rem;">🛡️ Parent / Guardian Information</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Parent/Guardian Full Name *</label>
+                                <input type="text" id="guardianName" placeholder="Full legal name">
+                            </div>
+                            <div class="form-group">
+                                <label>Parent/Guardian Phone Number *</label>
+                                <input type="tel" id="guardianPhone" placeholder="+1 (555) 000-0000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Parent/Guardian Email Address *</label>
+                            <input type="email" id="guardianEmail" placeholder="parent@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Relationship to Teen *</label>
+                            <select id="guardianRelation">
+                                <option value="">Select relationship...</option>
+                                <option value="mother">Mother</option>
+                                <option value="father">Father</option>
+                                <option value="legal_guardian">Legal Guardian</option>
+                                <option value="grandparent">Grandparent</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div style="border-top:1px solid rgba(99,102,241,0.1);margin:1.5rem 0;"></div>
+                        <h4 style="color:var(--neon-green);margin-bottom:1rem;font-size:0.95rem;">👤 Teen Information</h4>
+                    </div>
+
+                    <!-- Applicant Name -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" id="regFirstName" placeholder="John" required>
+                            <label>First Name *</label>
+                            <input type="text" id="regFirstName" placeholder="First name" required>
                         </div>
                         <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" id="regLastName" placeholder="Doe" required>
+                            <label>Last Name *</label>
+                            <input type="text" id="regLastName" placeholder="Last name" required>
                         </div>
                     </div>
+
+                    <!-- Date of Birth -->
                     <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="regEmail" placeholder="your@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Date of Birth</label>
+                        <label>Date of Birth *</label>
                         <input type="date" id="regDob" required>
                     </div>
+
+                    <!-- Birth Certificate Upload (TSMID) -->
+                    <div class="tsmid-fields" id="tsmidBirthCert">
+                        <div class="form-group">
+                            <label>Birth Certificate Upload *</label>
+                            <div style="border:2px dashed rgba(99,102,241,0.3);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;" onclick="document.getElementById('birthCertUpload').click()">
+                                <input type="file" id="birthCertUpload" accept="image/*,.pdf" style="display:none;" onchange="handleBirthCert(this)">
+                                <div style="font-size:2rem;margin-bottom:0.5rem;">📄</div>
+                                <div style="font-weight:600;font-size:0.9rem;">Click to upload Birth Certificate</div>
+                                <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.3rem;">JPG, PNG, or PDF</div>
+                                <div id="birthCertStatus" style="color:var(--neon-green);font-size:0.85rem;margin-top:0.5rem;display:none;">✓ Birth Certificate uploaded</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Country -->
                     <div class="form-group">
-                        <label>Country/Region</label>
-                        <select id="regCountry">
+                        <label>Country / Region *</label>
+                        <select id="regCountry" required>
                             <option value="">Select country...</option>
-                            <option value="us">United States</option>
-                            <option value="uk">United Kingdom</option>
-                            <option value="ca">Canada</option>
-                            <option value="ng">Nigeria</option>
-                            <option value="br">Brazil</option>
-                            <option value="fr">France</option>
-                            <option value="de">Germany</option>
-                            <option value="in">India</option>
-                            <option value="jp">Japan</option>
-                            <option value="other">Other</option>
+                            <option value="us">🇺🇸 United States</option>
+                            <option value="uk">🇬🇧 United Kingdom</option>
+                            <option value="ca">🇨🇦 Canada</option>
+                            <option value="ng">🇳🇬 Nigeria</option>
+                            <option value="br">🇧🇷 Brazil</option>
+                            <option value="fr">🇫🇷 France</option>
+                            <option value="de">🇩🇪 Germany</option>
+                            <option value="in">🇮🇳 India</option>
+                            <option value="jp">🇯🇵 Japan</option>
+                            <option value="au">🇦🇺 Australia</option>
+                            <option value="other">🌍 Other</option>
                         </select>
                     </div>
+
+                    <!-- Phone Number -->
                     <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" id="regPhone" placeholder="+1 (555) 000-0000">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="regPhone" placeholder="+1 (555) 000-0000" required>
                     </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" id="regEmail" placeholder="your@email.com" required>
+                    </div>
+
                     <div class="reg-nav">
                         <button class="btn btn-outline" onclick="prevStep(1)">← Back</button>
                         <button class="btn btn-primary" onclick="nextStep(3)">Continue →</button>
                     </div>
                 </div>
 
-                <!-- Step 3: Verification -->
+                <!-- ====== STEP 3: BIOMETRIC SCAN ====== -->
                 <div class="reg-panel" id="step-3">
-                    <h3 style="text-align:center;margin-bottom:1.5rem;">Identity Verification</h3>
-                    <p style="text-align:center;color:var(--text-muted);margin-bottom:1.5rem;font-size:0.9rem;">Upload a government-issued ID or student/business document for verification.</p>
+                    <h3 style="text-align:center;margin-bottom:0.5rem;">Biometric Verification</h3>
+                    <p style="text-align:center;color:var(--text-muted);margin-bottom:1.5rem;font-size:0.9rem;">Complete both scans to verify your identity. This data is encrypted and stored securely.</p>
 
-                    <div class="upload-zone" onclick="document.getElementById('idUpload').click()">
-                        <input type="file" id="idUpload" accept="image/*,.pdf" onchange="handleFileUpload(this)">
-                        <div style="font-size:2.5rem;margin-bottom:0.5rem;">📤</div>
-                        <div style="font-weight:600;margin-bottom:0.3rem;">Click to upload document</div>
-                        <div style="font-size:0.85rem;color:var(--text-muted);">JPG, PNG, or PDF up to 10MB</div>
-                        <div id="uploadStatus" style="margin-top:1rem;color:var(--neon-green);font-weight:600;display:none;">✓ Document selected</div>
+                    <div class="bio-scanner-container">
+                        <!-- Face Scanner -->
+                        <div class="scanner-box" id="faceScannerBox">
+                            <div class="face-frame" id="faceFrame">
+                                👤
+                                <div class="face-grid" id="faceGrid">
+                                    <div class="face-grid-line"></div>
+                                    <div class="face-grid-line"></div>
+                                    <div class="face-grid-line"></div>
+                                    <div class="face-grid-line"></div>
+                                </div>
+                                <div class="scan-overlay" id="faceOverlay"></div>
+                                <div class="scan-line-vert" id="faceScanLine"></div>
+                            </div>
+                            <div class="scanner-title">Face Scanner</div>
+                            <div class="scanner-desc">Position your face in the frame and hold still</div>
+                            <button class="btn btn-primary" style="width:100%;justify-content:center;" id="btnFaceScan" onclick="startFaceScan()">
+                                <span>📷</span> Start Face Scan
+                            </button>
+                            <div class="scan-progress" id="faceProgress" style="display:none;">
+                                <div class="scan-progress-fill" id="faceProgressFill"></div>
+                            </div>
+                            <div class="scan-status" id="faceStatus">Ready to scan</div>
+                        </div>
+
+                        <!-- Fingerprint Scanner -->
+                        <div class="scanner-box" id="fpScannerBox">
+                            <div class="fp-pad" id="fpPad">
+                                🖐️
+                                <div class="fp-ridges" id="fpRidges"></div>
+                                <div class="scan-overlay" id="fpOverlay"></div>
+                            </div>
+                            <div class="scanner-title">Fingerprint Scanner</div>
+                            <div class="scanner-desc">Place your finger on the sensor pad</div>
+                            <button class="btn btn-primary" style="width:100%;justify-content:center;" id="btnFpScan" onclick="startFpScan()">
+                                <span>🖐️</span> Start Fingerprint Scan
+                            </button>
+                            <div class="scan-progress" id="fpProgress" style="display:none;">
+                                <div class="scan-progress-fill" id="fpProgressFill"></div>
+                            </div>
+                            <div class="scan-status" id="fpStatus">Ready to scan</div>
+                        </div>
                     </div>
 
-                    <div class="form-group" style="margin-top:1.5rem;">
-                        <label>
-                            <input type="checkbox" id="regConsent" style="width:auto;margin-right:0.5rem;">
-                            I consent to SMID verifying my identity and agree to the <a href="#" style="color:var(--primary);">Terms of Service</a> and <a href="#" style="color:var(--primary);">Privacy Policy</a>.
-                        </label>
-                    </div>
                     <div class="reg-nav">
                         <button class="btn btn-outline" onclick="prevStep(2)">← Back</button>
-                        <button class="btn btn-primary" onclick="nextStep(4)">Continue →</button>
+                        <button class="btn btn-primary" onclick="nextStep(4)" id="btn-step3">Continue →</button>
                     </div>
                 </div>
 
-                <!-- Step 4: Review & Submit -->
+                <!-- ====== STEP 4: REVIEW & SUBMIT ====== -->
                 <div class="reg-panel" id="step-4">
                     <h3 style="text-align:center;margin-bottom:1.5rem;">Review & Confirm</h3>
                     <div class="review-box">
@@ -347,13 +598,13 @@
                             <span class="review-label">Category</span>
                             <span class="review-value" id="reviewCategory">-</span>
                         </div>
+                        <div class="review-row" id="reviewGuardianRow" style="display:none;">
+                            <span class="review-label">Parent/Guardian</span>
+                            <span class="review-value" id="reviewGuardian">-</span>
+                        </div>
                         <div class="review-row">
                             <span class="review-label">Full Name</span>
                             <span class="review-value" id="reviewName">-</span>
-                        </div>
-                        <div class="review-row">
-                            <span class="review-label">Email</span>
-                            <span class="review-value" id="reviewEmail">-</span>
                         </div>
                         <div class="review-row">
                             <span class="review-label">Date of Birth</span>
@@ -364,9 +615,27 @@
                             <span class="review-value" id="reviewCountry">-</span>
                         </div>
                         <div class="review-row">
-                            <span class="review-label">Document</span>
-                            <span class="review-value" id="reviewDoc">Uploaded</span>
+                            <span class="review-label">Phone</span>
+                            <span class="review-value" id="reviewPhone">-</span>
                         </div>
+                        <div class="review-row">
+                            <span class="review-label">Email</span>
+                            <span class="review-value" id="reviewEmail">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">Face Scan</span>
+                            <span class="review-value" id="reviewFace" style="color:var(--neon-green);">✓ Completed</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">Fingerprint</span>
+                            <span class="review-value" id="reviewFp" style="color:var(--neon-green);">✓ Completed</span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top:1.5rem;">
+                        <label>
+                            <input type="checkbox" id="regConsent" style="width:auto;margin-right:0.5rem;">
+                            I consent to SMID verifying my identity and agree to the <a href="#" style="color:var(--primary);">Terms of Service</a> and <a href="#" style="color:var(--primary);">Privacy Policy</a>.
+                        </label>
                     </div>
                     <div class="reg-nav">
                         <button class="btn btn-outline" onclick="prevStep(3)">← Back</button>
@@ -374,7 +643,7 @@
                     </div>
                 </div>
 
-                <!-- Success State -->
+                <!-- ====== SUCCESS STATE ====== -->
                 <div class="reg-panel" id="step-success" style="text-align:center;padding:2rem 0;">
                     <div class="success-check">✓</div>
                     <h3 style="margin-bottom:0.5rem;">Application Submitted!</h3>
@@ -403,7 +672,16 @@
 
     <script src="shared.js"></script>
     <script>
-        let regData = { category: '', firstName: '', lastName: '', email: '', dob: '', country: '', phone: '', docUploaded: false };
+        let regData = {
+            category: '',
+            firstName: '', lastName: '',
+            dob: '', country: '', phone: '', email: '',
+            // TSMID specific
+            guardianName: '', guardianPhone: '', guardianEmail: '', guardianRelation: '',
+            birthCertUploaded: false,
+            // Biometric
+            faceScanned: false, fpScanned: false
+        };
         let currentStep = 1;
 
         function selectCategory(cat) {
@@ -414,26 +692,51 @@
         }
 
         function nextStep(step) {
-            // Validation
-            if (step === 2 && !regData.category) {
-                showNotification('Error', 'Please select a category first', 'error');
-                return;
-            }
-            if (step === 3) {
-                regData.firstName = document.getElementById('regFirstName').value;
-                regData.lastName = document.getElementById('regLastName').value;
-                regData.email = document.getElementById('regEmail').value;
-                regData.dob = document.getElementById('regDob').value;
-                regData.country = document.getElementById('regCountry').value;
-                regData.phone = document.getElementById('regPhone').value;
-                if (!regData.firstName || !regData.lastName || !regData.email || !regData.dob) {
-                    showNotification('Error', 'Please fill all required fields', 'error');
+            // Step 1 → 2 validation
+            if (step === 2) {
+                if (!regData.category) {
+                    showNotification('Error', 'Please select a category first', 'error');
                     return;
                 }
             }
+
+            // Step 2 → 3 validation
+            if (step === 3) {
+                regData.firstName = document.getElementById('regFirstName').value;
+                regData.lastName = document.getElementById('regLastName').value;
+                regData.dob = document.getElementById('regDob').value;
+                regData.country = document.getElementById('regCountry').value;
+                regData.phone = document.getElementById('regPhone').value;
+                regData.email = document.getElementById('regEmail').value;
+
+                // Basic required fields
+                if (!regData.firstName || !regData.lastName || !regData.dob || !regData.country || !regData.phone || !regData.email) {
+                    showNotification('Error', 'Please fill all required fields', 'error');
+                    return;
+                }
+
+                // TSMID specific validation
+                if (regData.category === 'tsmid') {
+                    regData.guardianName = document.getElementById('guardianName').value;
+                    regData.guardianPhone = document.getElementById('guardianPhone').value;
+                    regData.guardianEmail = document.getElementById('guardianEmail').value;
+                    regData.guardianRelation = document.getElementById('guardianRelation').value;
+
+                    if (!regData.guardianName || !regData.guardianPhone || !regData.guardianEmail || !regData.guardianRelation) {
+                        showNotification('Error', 'Please fill all parent/guardian fields', 'error');
+                        return;
+                    }
+                    if (!regData.birthCertUploaded) {
+                        showNotification('Error', 'Please upload birth certificate', 'error');
+                        return;
+                    }
+                }
+            }
+
+            // Step 3 → 4 validation
             if (step === 4) {
-                if (!document.getElementById('regConsent').checked) {
-                    showNotification('Error', 'Please accept the terms to continue', 'error');
+                if (!regData.faceScanned || !regData.fpScanned) {
+                    showNotification('Error', 'Please complete both biometric scans', 'error');
                     return;
                 }
                 updateReview();
@@ -448,6 +751,14 @@
                 if (sNum === step) s.classList.add('active');
                 else if (sNum < step) s.classList.add('done');
             });
+
+            // Show/hide TSMID fields when entering step 2
+            if (step === 2) {
+                const isTsmid = regData.category === 'tsmid';
+                document.getElementById('tsmidNotice').classList.toggle('show', isTsmid);
+                document.getElementById('tsmidGuardianFields').classList.toggle('show', isTsmid);
+                document.getElementById('tsmidBirthCert').classList.toggle('show', isTsmid);
+            }
         }
 
         function prevStep(step) {
@@ -462,24 +773,162 @@
             });
         }
 
-        function handleFileUpload(input) {
+        // ====== BIRTH CERTIFICATE UPLOAD ======
+        function handleBirthCert(input) {
             if (input.files && input.files[0]) {
-                regData.docUploaded = true;
-                document.getElementById('uploadStatus').style.display = 'block';
-                showNotification('Success', 'Document ready for upload', 'success');
+                regData.birthCertUploaded = true;
+                document.getElementById('birthCertStatus').style.display = 'block';
+                showNotification('Success', 'Birth certificate uploaded', 'success');
             }
         }
 
-        function updateReview() {
-            const catNames = { tsmid: 'TSMID (Teen)', tasmid: 'TASMID (Student)', asmid: 'ASMID (Adult)', bsmid: 'BSMID (Business)' };
-            document.getElementById('reviewCategory').textContent = catNames[regData.category] || regData.category;
-            document.getElementById('reviewName').textContent = regData.firstName + ' ' + regData.lastName;
-            document.getElementById('reviewEmail').textContent = regData.email;
-            document.getElementById('reviewDob').textContent = regData.dob;
-            document.getElementById('reviewCountry').textContent = regData.country.toUpperCase();
+        // ====== FACE SCANNER ======
+        function startFaceScan() {
+            const box = document.getElementById('faceScannerBox');
+            const frame = document.getElementById('faceFrame');
+            const grid = document.getElementById('faceGrid');
+            const overlay = document.getElementById('faceOverlay');
+            const scanLine = document.getElementById('faceScanLine');
+            const progress = document.getElementById('faceProgress');
+            const fill = document.getElementById('faceProgressFill');
+            const status = document.getElementById('faceStatus');
+            const btn = document.getElementById('btnFaceScan');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span>📷</span> Scanning...';
+            frame.classList.add('scanning');
+            grid.style.display = 'grid';
+            overlay.style.display = 'block';
+            scanLine.style.display = 'block';
+            progress.style.display = 'block';
+            status.textContent = 'Scanning face...';
+            status.className = 'scan-status scanning';
+
+            let pct = 0;
+            const interval = setInterval(() => {
+                pct += 5;
+                fill.style.width = pct + '%';
+                if (pct >= 100) {
+                    clearInterval(interval);
+                    // Complete
+                    frame.classList.remove('scanning');
+                    frame.classList.add('completed');
+                    frame.innerHTML = '✓';
+                    frame.style.fontSize = '3rem';
+                    frame.style.color = 'var(--neon-green)';
+                    grid.style.display = 'none';
+                    overlay.style.display = 'none';
+                    scanLine.style.display = 'none';
+                    progress.style.display = 'none';
+                    status.textContent = '✓ Face verified';
+                    status.className = 'scan-status complete';
+                    box.classList.add('completed');
+                    btn.innerHTML = '<span>✓</span> Face Verified';
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-outline');
+                    regData.faceScanned = true;
+                    showNotification('Success', 'Face scan complete', 'success');
+                }
+            }, 150);
         }
 
+        // ====== FINGERPRINT SCANNER ======
+        function startFpScan() {
+            const box = document.getElementById('fpScannerBox');
+            const pad = document.getElementById('fpPad');
+            const ridges = document.getElementById('fpRidges');
+            const overlay = document.getElementById('fpOverlay');
+            const progress = document.getElementById('fpProgress');
+            const fill = document.getElementById('fpProgressFill');
+            const status = document.getElementById('fpStatus');
+            const btn = document.getElementById('btnFpScan');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span>🖐️</span> Scanning...';
+            pad.classList.add('scanning');
+            overlay.style.display = 'block';
+            progress.style.display = 'block';
+            status.textContent = 'Reading fingerprint...';
+            status.className = 'scan-status scanning';
+
+            // Generate ridge lines
+            ridges.innerHTML = '';
+            ridges.style.display = 'block';
+            for (let i = 0; i < 8; i++) {
+                const ridge = document.createElement('div');
+                ridge.className = 'fp-ridge';
+                ridge.style.width = (30 + i * 12) + 'px';
+                ridge.style.height = (30 + i * 12) + 'px';
+                ridge.style.top = (10 - i * 2) + 'px';
+                ridge.style.opacity = '0';
+                ridge.style.transition = 'opacity 0.2s';
+                ridges.appendChild(ridge);
+            }
+
+            let pct = 0;
+            const interval = setInterval(() => {
+                pct += 4;
+                fill.style.width = pct + '%';
+                // Reveal ridges progressively
+                const ridgeIdx = Math.floor((pct / 100) * 8);
+                Array.from(ridges.children).forEach((r, i) => {
+                    if (i <= ridgeIdx) r.style.opacity = '0.6';
+                });
+
+                if (pct >= 100) {
+                    clearInterval(interval);
+                    // Complete
+                    pad.classList.remove('scanning');
+                    pad.classList.add('completed');
+                    pad.innerHTML = '✓';
+                    pad.style.fontSize = '3rem';
+                    pad.style.color = 'var(--neon-green)';
+                    ridges.style.display = 'none';
+                    overlay.style.display = 'none';
+                    progress.style.display = 'none';
+                    status.textContent = '✓ Fingerprint verified';
+                    status.className = 'scan-status complete';
+                    box.classList.add('completed');
+                    btn.innerHTML = '<span>✓</span> Fingerprint Verified';
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-outline');
+                    regData.fpScanned = true;
+                    showNotification('Success', 'Fingerprint scan complete', 'success');
+                }
+            }, 120);
+        }
+
+        // ====== REVIEW ======
+        function updateReview() {
+            const catNames = {
+                tsmid: 'TSMID (Teen)',
+                tasmid: 'TASMID (Student)',
+                asmid: 'ASMID (Adult)',
+                bsmid: 'BSMID (Business)'
+            };
+            document.getElementById('reviewCategory').textContent = catNames[regData.category] || regData.category;
+            document.getElementById('reviewName').textContent = regData.firstName + ' ' + regData.lastName;
+            document.getElementById('reviewDob').textContent = regData.dob;
+            document.getElementById('reviewCountry').textContent = regData.country.toUpperCase();
+            document.getElementById('reviewPhone').textContent = regData.phone;
+            document.getElementById('reviewEmail').textContent = regData.email;
+
+            // Show guardian row for TSMID
+            if (regData.category === 'tsmid') {
+                document.getElementById('reviewGuardianRow').style.display = 'flex';
+                document.getElementById('reviewGuardian').textContent = regData.guardianName + ' (' + regData.guardianRelation + ')';
+            } else {
+                document.getElementById('reviewGuardianRow').style.display = 'none';
+            }
+        }
+
+        // ====== SUBMIT ======
         function submitRegistration() {
+            if (!document.getElementById('regConsent').checked) {
+                showNotification('Error', 'Please accept the terms to continue', 'error');
+                return;
+            }
+
             const appId = 'SMID-' + new Date().getFullYear() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
             document.getElementById('appId').textContent = appId;
 
@@ -490,7 +939,8 @@
                 name: regData.firstName + ' ' + regData.lastName,
                 email: regData.email,
                 appId: appId,
-                status: 'Pending Review'
+                status: 'Pending Review',
+                guardian: regData.category === 'tsmid' ? regData.guardianName : null
             });
 
             // Update user if logged in
