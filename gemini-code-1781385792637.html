@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMID - About the Founder</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .founder-hero {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        .founder-photo-card {
+            position: relative;
+            text-align: center;
+        }
+        .founder-photo-frame {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--card), var(--darker));
+            border: 4px solid transparent;
+            background-clip: padding-box;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3), 0 20px 60px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        .founder-photo-frame::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary), var(--accent));
+            z-index: -1;
+            animation: rotateBorder 4s linear infinite;
+        }
+        @keyframes rotateBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .founder-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 1.5rem;
+            padding: 0.5rem 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        .founder-info h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.2rem;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(135deg, var(--text), var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .founder-role {
+            color: var(--primary-glow);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .founder-bio {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        .founder-quote {
+            background: var(--card);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0 16px 16px 0;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .founder-quote::before {
+            content: '"';
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+        }
+        .founder-quote p {
+            color: var(--text);
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+        .contact-section {
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .contact-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
+        }
+        .contact-icon-bg {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+        .contact-label {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .contact-value {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        .founder-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .value-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        .value-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .value-title {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .value-desc {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .cta-banner {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .cta-banner h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .cta-banner p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .timeline {
+            max-width: 600px;
+            margin: 3rem auto;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+        .timeline-content {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1rem;
+            flex: 1;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        .timeline-year {
+            font-family: 'Orbitron', monospace;
+            color: var(--primary-glow);
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+        .timeline-title {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .timeline-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .founder-hero { grid-template-columns: 1fr; text-align: center; }
+            .founder-photo
