@@ -6,213 +6,186 @@
     <title>SMID - Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .dashboard-grid {
+        .dash-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 280px 1fr;
             gap: 2rem;
-            margin-top: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .dash-card {
+        .dash-sidebar {
             background: var(--card);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 1.5rem;
             border: 1px solid rgba(99, 102, 241, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
         }
-        .dash-card h3 {
-            font-family: 'Orbitron', monospace;
-            margin-bottom: 1.5rem;
-            color: var(--primary-glow);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .dash-stat {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-        }
-        .dash-stat:last-child { border-bottom: none; }
-        .dash-stat-label { color: var(--text-muted); }
-        .dash-stat-value {
-            font-family: 'Orbitron', monospace;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-        .trust-meter {
-            width: 100%;
-            height: 20px;
-            background: var(--darker);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-        .trust-fill {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
-        }
-        .trust-high { background: linear-gradient(90deg, var(--neon-green), #22c55e); }
-        .trust-med { background: linear-gradient(90deg, var(--warning), #f59e0b); }
-        .trust-low { background: linear-gradient(90deg, var(--danger), #ef4444); }
-        .reg-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        .reg-table th, .reg-table td {
-            padding: 0.8rem;
-            text-align: left;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-        }
-        .reg-table th {
-            color: var(--primary-glow);
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .reg-table td { color: var(--text-muted); font-size: 0.9rem; }
-        .reg-table tr:hover td { color: var(--text); }
-        .badge {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .badge-tsmid { background: rgba(0, 255, 136, 0.2); color: var(--neon-green); }
-        .badge-tasmid { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
-        .badge-asmid { background: rgba(0, 243, 255, 0.2); color: var(--neon-blue); }
-        .badge-bsmid { background: rgba(176, 38, 255, 0.2); color: var(--neon-purple); }
-        .empty-state { text-align: center; padding: 3rem; color: var(--text-muted); }
-        .empty-state p { margin-top: 1rem; }
-        .code-game {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: center;
-            max-width: 500px;
-            margin: 0 auto;
-            border: 2px solid rgba(99, 102, 241, 0.3);
-        }
-        .code-display {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-        .code-digit {
-            width: 60px;
-            height: 80px;
-            background: var(--darker);
-            border-radius: 12px;
+        .dash-avatar {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+        .dash-user-name {
+            text-align: center;
             font-weight: 700;
-            font-family: 'Orbitron', monospace;
-            border: 2px solid var(--primary);
-            transition: all 0.3s;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
         }
-        .code-digit.correct {
-            border-color: var(--neon-green);
-            color: var(--neon-green);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-        }
-        .code-digit.wrong {
-            border-color: var(--danger);
-            color: var(--danger);
-            animation: shake 0.5s;
-        }
-        .keypad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-        .key-btn {
-            padding: 1.2rem;
-            border-radius: 12px;
-            border: 2px solid rgba(99, 102, 241, 0.3);
-            background: var(--darker);
-            color: var(--text);
-            font-size: 1.3rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-        .key-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: scale(1.05);
-        }
-        .key-btn:active { transform: scale(0.95); }
-        .game-info { margin-bottom: 1.5rem; }
-        .game-info p { color: var(--text-muted); font-size: 0.9rem; }
-        .game-info span { color: var(--primary); font-weight: 700; }
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
-            padding-bottom: 0.5rem;
-            flex-wrap: wrap;
-        }
-        .tab-btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            border: none;
-            background: transparent;
+        .dash-user-handle {
+            text-align: center;
             color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 600;
-            font-family: inherit;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px;
-            transition: all 0.3s;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
         }
-        .tab-btn.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
+        .dash-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
         }
-        .tab-btn:hover:not(.active) { color: var(--text); }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
-        .chart-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+        .dash-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
         }
-        .reports-queue {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .report-item {
-            background: var(--card);
+        .dash-menu-item {
+            padding: 0.8rem 1rem;
             border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .dash-menu-item:hover, .dash-menu-item.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-glow);
+        }
+        .dash-menu-item.active { font-weight: 600; }
+        .dash-main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .dash-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        .dash-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 4px solid var(--danger);
+            margin-bottom: 1rem;
         }
-        .report-item.resolved { border-left-color: var(--neon-green); opacity: 0.6; }
-        .report-status {
-            padding: 0.2rem 0.6rem;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        .dash-card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            color: var(--primary-glow);
         }
-        .status-pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
-        .status-resolved { background: rgba(34, 197, 94, 0.2); color: var(--neon-green); }
+        .trust-ring {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--neon-green) 0% var(--trust-pct), var(--darker) var(--trust-pct) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+        }
+        .trust-ring::before {
+            content: '';
+            position: absolute;
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: var(--card);
+        }
+        .trust-score {
+            position: relative;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--neon-green);
+        }
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            border-radius: 12px;
+            background: var(--darker);
+            transition: all 0.3s;
+        }
+        .activity-item:hover { background: rgba(99,102,241,0.1); }
+        .activity-icon {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: rgba(99,102,241,0.1);
+            flex-shrink: 0;
+        }
+        .activity-text { flex: 1; font-size: 0.9rem; }
+        .activity-time { font-size: 0.75rem; color: var(--text-muted); }
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(99,102,241,0.1);
+        }
+        .data-row:last-child { border-bottom: none; }
+        .data-label { color: var(--text-muted); font-size: 0.9rem; }
+        .data-value { font-weight: 600; }
+        .chart-canvas { width: 100%; height: 250px; }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+        .quick-action {
+            background: var(--darker);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .quick-action:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        .quick-action-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .quick-action-label { font-size: 0.85rem; font-weight: 600; }
+        @media (max-width: 768px) {
+            .dash-grid { grid-template-columns: 1fr; }
+            .dash-sidebar { position: static; }
+        }
     </style>
 </head>
 <body data-theme="dark">
@@ -271,159 +244,178 @@
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Dashboard</h2>
-            <p class="section-subtitle">Monitor verifications, analytics, and security</p>
-
-            <!-- Search Bar -->
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search by name, category, or ID..." oninput="handleSearch()">
-                <button onclick="handleSearch()">🔍</button>
-            </div>
-
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('overview')">📊 Overview</button>
-                <button class="tab-btn" onclick="switchTab('analytics')">📈 Analytics</button>
-                <button class="tab-btn" onclick="switchTab('registrations')">📝 Registrations</button>
-                <button class="tab-btn" onclick="switchTab('reports')">🚩 Reports</button>
-                <button class="tab-btn" onclick="switchTab('game')">🎮 Crack The Code</button>
-            </div>
-
-            <!-- Overview Tab -->
-            <div class="tab-panel active" id="tab-overview">
-                <div class="dashboard-grid">
-                    <div class="dash-card">
-                        <h3>📈 Verification Stats</h3>
-                        <div class="dash-stat">
-                            <span class="dash-stat-label">Total Verifications</span>
-                            <span class="dash-stat-value" id="statTotal">0</span>
-                        </div>
-                        <div class="dash-stat">
-                            <span class="dash-stat-label">TSMID (Teen)</span>
-                            <span class="dash-stat-value" style="color: var(--neon-green);" id="statTsmid">0</span>
-                        </div>
-                        <div class="dash-stat">
-                            <span class="dash-stat-label">TASMID (Young Adult)</span>
-                            <span class="dash-stat-value" style="color: var(--warning);" id="statTasmid">0</span>
-                        </div>
-                        <div class="dash-stat">
-                            <span class="dash-stat-label">ASMID (Adult)</span>
-                            <span class="dash-stat-value" style="color: var(--neon-blue);" id="statAsmid">0</span>
-                        </div>
-                        <div class="dash-stat">
-                            <span class="dash-stat-label">BSMID (Business)</span>
-                            <span class="dash-stat-value" style="color: var(--neon-purple);" id="statBsmid">0</span>
-                        </div>
-                    </div>
-
-                    <div class="dash-card">
-                        <h3>🛡️ Trust Score Distribution</h3>
-                        <div class="dash-stat">
-                            <span class="dash-stat-label">Average Trust Score</span>
-                            <span class="dash-stat-value" id="statAvgTrust">--</span>
-                        </div>
-                        <div class="trust-meter">
-                            <div class="trust-fill trust-high" id="trustBar" style="width: 0%"></div>
-                        </div>
-                        <div class="dash-stat" style="margin-top: 1.5rem;">
-                            <span class="dash-stat-label">High Trust (90+)</span>
-                            <span class="dash-stat-value" style="color: var(--neon-green);" id="statHigh">0</span>
-                        </div>
-                        <div class="dash-stat">
-                            <span class="dash-stat-label">Medium Trust (70-89)</span>
-                            <span class="dash-stat-value" style="color: var(--warning);" id="statMed">0</span>
-                        </div>
-                        <div class="dash-stat">
-                            <span class="dash-stat-label">Low Trust (&lt;70)</span>
-                            <span class="dash-stat-value" style="color: var(--danger);" id="statLow">0</span>
-                        </div>
-                    </div>
-
-                    <div class="dash-card">
-                        <h3>⚡ Quick Actions</h3>
-                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                            <a href="register.html" class="btn btn-primary" style="justify-content: center;">📝 New Registration</a>
-                            <a href="idcard.html" class="btn btn-outline" style="justify-content: center;">🎴 View ID Cards</a>
-                            <a href="cloud.html" class="btn btn-outline" style="justify-content: center;">☁️ Manage Cloud Data</a>
-                            <button class="btn btn-danger" onclick="clearAllData()" style="justify-content: center;">🗑️ Clear All Data</button>
-                        </div>
+            <div class="dash-grid">
+                <!-- Sidebar -->
+                <div class="dash-sidebar">
+                    <div class="dash-avatar" id="dashAvatar">👤</div>
+                    <div class="dash-user-name" id="dashName">Guest User</div>
+                    <div class="dash-user-handle" id="dashHandle">@guest</div>
+                    <div class="dash-badge" id="dashBadge" style="display:none;">✓ Verified</div>
+                    <div class="dash-menu">
+                        <a href="#overview" class="dash-menu-item active" onclick="switchDashTab('overview', this)">
+                            <span>📊</span> Overview
+                        </a>
+                        <a href="#identity" class="dash-menu-item" onclick="switchDashTab('identity', this)">
+                            <span>🪪</span> Identity
+                        </a>
+                        <a href="#activity" class="dash-menu-item" onclick="switchDashTab('activity', this)">
+                            <span>📋</span> Activity
+                        </a>
+                        <a href="#security" class="dash-menu-item" onclick="switchDashTab('security', this)">
+                            <span>🔐</span> Security
+                        </a>
+                        <a href="cloud.html" class="dash-menu-item">
+                            <span>☁️</span> Cloud Storage
+                        </a>
+                        <a href="#" class="dash-menu-item" onclick="SMIDAuth.logout()">
+                            <span>🚪</span> Logout
+                        </a>
                     </div>
                 </div>
-            </div>
 
-            <!-- Analytics Tab (Charts) -->
-            <div class="tab-panel" id="tab-analytics">
-                <div class="chart-row">
-                    <div class="chart-container">
-                        <h4 style="font-family: 'Orbitron', monospace; margin-bottom: 1rem; color: var(--primary-glow);">Verifications by Category</h4>
-                        <canvas id="barChart" style="width: 100%; height: 240px;"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4 style="font-family: 'Orbitron', monospace; margin-bottom: 1rem; color: var(--primary-glow);">Trust Score Distribution</h4>
-                        <canvas id="pieChart" style="width: 100%; height: 240px;"></canvas>
-                    </div>
-                </div>
-            </div>
+                <!-- Main Content -->
+                <div class="dash-main">
+                    <!-- Overview Tab -->
+                    <div class="dash-tab active" id="tab-overview">
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <span class="dash-card-title">Trust Score</span>
+                                <span style="font-size:0.85rem;color:var(--text-muted);">Updated today</span>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;">
+                                <div>
+                                    <div class="trust-ring" id="trustRing" style="--trust-pct:50%;">
+                                        <div class="trust-score" id="trustScore">50</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="data-row">
+                                        <span class="data-label">Verification Status</span>
+                                        <span class="data-value" id="verStatus" style="color:var(--warning);">⏳ Pending</span>
+                                    </div>
+                                    <div class="data-row">
+                                        <span class="data-label">Account Age</span>
+                                        <span class="data-value">New</span>
+                                    </div>
+                                    <div class="data-row">
+                                        <span class="data-label">Reports Filed</span>
+                                        <span class="data-value" id="reportsCount">0</span>
+                                    </div>
+                                    <div class="data-row">
+                                        <span class="data-label">Cloud Items</span>
+                                        <span class="data-value" id="cloudCount">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-            <!-- Registrations Tab -->
-            <div class="tab-panel" id="tab-registrations">
-                <div class="dash-card">
-                    <h3>📝 All Registrations</h3>
-                    <div id="regTableContainer">
-                        <div class="empty-state">
-                            <div style="font-size: 3rem;">📭</div>
-                            <p>No registrations yet. <a href="register.html" style="color: var(--primary);">Register now</a> to get started.</p>
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <span class="dash-card-title">Trust Trend</span>
+                            </div>
+                            <canvas id="trustChart" class="chart-canvas"></canvas>
+                        </div>
+
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <span class="dash-card-title">Quick Actions</span>
+                            </div>
+                            <div class="quick-actions">
+                                <a href="register.html" class="quick-action">
+                                    <div class="quick-action-icon">🛡️</div>
+                                    <div class="quick-action-label">Verify</div>
+                                </a>
+                                <a href="idcard.html" class="quick-action">
+                                    <div class="quick-action-icon">🪪</div>
+                                    <div class="quick-action-label">ID Card</div>
+                                </a>
+                                <a href="cloud.html" class="quick-action">
+                                    <div class="quick-action-icon">☁️</div>
+                                    <div class="quick-action-label">Cloud</div>
+                                </a>
+                                <div class="quick-action" onclick="showNotification('Info','Settings coming soon','info')">
+                                    <div class="quick-action-icon">⚙️</div>
+                                    <div class="quick-action-label">Settings</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Reports Tab -->
-            <div class="tab-panel" id="tab-reports">
-                <div class="reports-queue">
-                    <h3 style="font-family: 'Orbitron', monospace; margin-bottom: 1.5rem; color: var(--danger);">🚩 Moderation Queue</h3>
-                    <div id="reportsList">
-                        <div class="empty-state">
-                            <div style="font-size: 3rem;">✅</div>
-                            <p>No pending reports. The community is behaving well!</p>
+                    <!-- Identity Tab -->
+                    <div class="dash-tab" id="tab-identity" style="display:none;">
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <span class="dash-card-title">Identity Details</span>
+                            </div>
+                            <div id="identityContent">
+                                <div class="data-row">
+                                    <span class="data-label">SMID ID</span>
+                                    <span class="data-value" id="smidId">-</span>
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-label">Category</span>
+                                    <span class="data-value" id="idCategory">-</span>
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-label">Full Name</span>
+                                    <span class="data-value" id="idName">-</span>
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-label">Email</span>
+                                    <span class="data-value" id="idEmail">-</span>
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-label">Verification Date</span>
+                                    <span class="data-value" id="idDate">-</span>
+                                </div>
+                            </div>
+                            <div style="text-align:center;margin-top:1.5rem;">
+                                <a href="idcard.html" class="btn btn-primary">View Digital ID Card</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Game Tab -->
-            <div class="tab-panel" id="tab-game">
-                <div class="code-game">
-                    <h3 style="font-family: 'Orbitron', monospace; margin-bottom: 0.5rem;">🔐 Crack The Code</h3>
-                    <p style="color: var(--text-muted);">Guess the 4-digit access code</p>
-
-                    <div class="code-display" id="codeDisplay">
-                        <div class="code-digit" id="d0">-</div>
-                        <div class="code-digit" id="d1">-</div>
-                        <div class="code-digit" id="d2">-</div>
-                        <div class="code-digit" id="d3">-</div>
+                    <!-- Activity Tab -->
+                    <div class="dash-tab" id="tab-activity" style="display:none;">
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <span class="dash-card-title">Recent Activity</span>
+                                <button class="btn btn-sm btn-outline" onclick="clearActivity()">Clear</button>
+                            </div>
+                            <div class="activity-list" id="activityList">
+                                <div class="activity-item">
+                                    <div class="activity-icon">🆕</div>
+                                    <div class="activity-text">Account created</div>
+                                    <div class="activity-time">Just now</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="game-info">
-                        <p>Attempts: <span id="attempts">0</span> / 10</p>
-                        <p id="gameHint" style="margin-top: 0.5rem; min-height: 1.5rem;">Enter 4 digits to begin...</p>
+                    <!-- Security Tab -->
+                    <div class="dash-tab" id="tab-security" style="display:none;">
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <span class="dash-card-title">Security Settings</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Two-Factor Authentication</span>
+                                <button class="btn btn-sm btn-outline" onclick="toggle2FA(this)">Enable</button>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Login Notifications</span>
+                                <button class="btn btn-sm btn-primary" onclick="toggleNotif(this)">Enabled</button>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Change Password</span>
+                                <button class="btn btn-sm btn-outline" onclick="showNotification('Info','Feature coming soon','info')">Update</button>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Active Sessions</span>
+                                <span class="data-value" style="color:var(--neon-green);">1 device</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="keypad">
-                        <button class="key-btn" onclick="pressKey(1)">1</button>
-                        <button class="key-btn" onclick="pressKey(2)">2</button>
-                        <button class="key-btn" onclick="pressKey(3)">3</button>
-                        <button class="key-btn" onclick="pressKey(4)">4</button>
-                        <button class="key-btn" onclick="pressKey(5)">5</button>
-                        <button class="key-btn" onclick="pressKey(6)">6</button>
-                        <button class="key-btn" onclick="pressKey(7)">7</button>
-                        <button class="key-btn" onclick="pressKey(8)">8</button>
-                        <button class="key-btn" onclick="pressKey(9)">9</button>
-                        <button class="key-btn" onclick="clearCode()">C</button>
-                        <button class="key-btn" onclick="pressKey(0)">0</button>
-                        <button class="key-btn" onclick="submitCode()">✓</button>
-                    </div>
-
-                    <button class="btn btn-outline" style="margin-top: 1.5rem;" onclick="initGame()">🔄 New Code</button>
                 </div>
             </div>
         </div>
@@ -432,4 +424,95 @@
     <footer class="footer">
         <p style="font-family: 'Orbitron', monospace; font-size: 1.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SMID</p>
         <p>Identity Today, Safety Tomorrow.</p>
-        <p st
+        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 SMID Platform. Founded by Oluwatosin Abraham Willoughby. All rights reserved.</p>
+    </footer>
+
+    <div class="cloud-status" onclick="showCloudInfo()">
+        <div class="cloud-dot"></div>
+        <span data-i18n="cloud_sync">Cloud Sync: Active</span>
+        <span id="savedCount" style="color: var(--text-muted); font-size: 0.75rem;">(0 saved)</span>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+        function switchDashTab(tab, el) {
+            document.querySelectorAll('.dash-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.dash-menu-item').forEach(m => m.classList.remove('active'));
+            document.getElementById('tab-' + tab).style.display = 'block';
+            if (el) el.classList.add('active');
+        }
+
+        function loadDashboard() {
+            const user = SMIDAuth.getUser();
+            if (user) {
+                document.getElementById('dashName').textContent = user.name || 'User';
+                document.getElementById('dashHandle').textContent = '@' + (user.email?.split('@')[0] || 'user');
+                document.getElementById('dashAvatar').textContent = (user.name?.[0] || '👤').toUpperCase();
+                document.getElementById('smidId').textContent = user.id || '-';
+                document.getElementById('idName').textContent = user.name || '-';
+                document.getElementById('idEmail').textContent = user.email || '-';
+                document.getElementById('idDate').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-';
+
+                const catNames = { tsmid: 'TSMID (Teen)', tasmid: 'TASMID (Student)', asmid: 'ASMID (Adult)', bsmid: 'BSMID (Business)' };
+                document.getElementById('idCategory').textContent = catNames[user.category] || (user.category || 'Not selected');
+
+                const badge = document.getElementById('dashBadge');
+                if (user.verified === true) {
+                    badge.style.display = 'flex';
+                    badge.style.background = 'rgba(0,255,136,0.2)';
+                    badge.style.color = 'var(--neon-green)';
+                    badge.innerHTML = '✓ Verified';
+                    document.getElementById('verStatus').innerHTML = '<span style="color:var(--neon-green);">✓ Verified</span>';
+                    document.getElementById('trustScore').textContent = user.trustScore || 85;
+                    document.getElementById('trustRing').style.setProperty('--trust-pct', (user.trustScore || 85) + '%');
+                } else if (user.verified === 'pending') {
+                    badge.style.display = 'flex';
+                    badge.style.background = 'rgba(245,158,11,0.2)';
+                    badge.style.color = 'var(--warning)';
+                    badge.innerHTML = '⏳ Pending';
+                    document.getElementById('trustScore').textContent = 50;
+                    document.getElementById('trustRing').style.setProperty('--trust-pct', '50%');
+                } else {
+                    badge.style.display = 'none';
+                    document.getElementById('trustScore').textContent = 20;
+                    document.getElementById('trustRing').style.setProperty('--trust-pct', '20%');
+                }
+            } else {
+                // Guest view
+                document.getElementById('dashName').textContent = 'Guest';
+                document.getElementById('trustScore').textContent = 0;
+                document.getElementById('trustRing').style.setProperty('--trust-pct', '0%');
+            }
+
+            // Load stats
+            const reports = JSON.parse(localStorage.getItem('smid_reports') || '[]');
+            document.getElementById('reportsCount').textContent = reports.length;
+            document.getElementById('cloudCount').textContent = SMIDCloud.getData().length;
+
+            // Draw chart
+            setTimeout(() => {
+                drawSimpleChart('trustChart', [20, 35, 45, 50, 60, 55, 70], ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], '#6366f1');
+            }, 300);
+        }
+
+        function clearActivity() {
+            document.getElementById('activityList').innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:1rem;">No recent activity</div>';
+        }
+
+        function toggle2FA(btn) {
+            const enabled = btn.textContent === 'Enable';
+            btn.textContent = enabled ? 'Enabled' : 'Enable';
+            btn.className = enabled ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+            showNotification('Success', enabled ? '2FA enabled' : '2FA disabled', 'success');
+        }
+
+        function toggleNotif(btn) {
+            const enabled = btn.textContent === 'Enabled';
+            btn.textContent = enabled ? 'Disabled' : 'Enabled';
+            btn.className = enabled ? 'btn btn-sm btn-outline' : 'btn btn-sm btn-primary';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>
