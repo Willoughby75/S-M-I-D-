@@ -1,5 +1,5 @@
 /* ============================================
-   SMID PLATFORM - SHARED STYLES
+   SMID PLATFORM v2 — UPGRADED STYLES
    Social Media Identification System
    ============================================ */
 
@@ -44,6 +44,18 @@
     --secondary: #ff00a0;
     --accent: #00f3ff;
 }
+
+/* RTL Support */
+[dir="rtl"] { direction: rtl; }
+[dir="rtl"] .nav-links { flex-direction: row-reverse; }
+[dir="rtl"] .form-row { direction: rtl; }
+[dir="rtl"] .founder-hero { direction: rtl; }
+[dir="rtl"] .problem-item { direction: rtl; }
+[dir="rtl"] .mission-card { direction: rtl; }
+[dir="rtl"] .id-card-body { direction: ltr; }
+[dir="rtl"] .reg-item { direction: rtl; }
+[dir="rtl"] .dash-stat { direction: rtl; }
+[dir="rtl"] .data-row { direction: rtl; }
 
 /* ---------- Reset & Base ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -104,7 +116,7 @@ body {
 
 .nav-links {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     align-items: center;
 }
 
@@ -114,15 +126,85 @@ body {
     font-weight: 500;
     transition: color 0.3s;
     cursor: pointer;
+    font-size: 0.9rem;
 }
 
 .nav-links a:hover, .nav-links a.active {
     color: var(--primary-glow);
 }
 
+.nav-controls {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+/* Language Switcher */
+.lang-switcher {
+    position: relative;
+}
+
+.lang-btn {
+    background: var(--card);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.3s;
+}
+
+.lang-btn:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background: var(--card);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px;
+    padding: 0.5rem;
+    min-width: 160px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1001;
+}
+
+.lang-dropdown.show { display: block; }
+
+.lang-option {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    color: var(--text);
+}
+
+.lang-option:hover {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.lang-option.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* Theme Toggle */
 .theme-toggle {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.3rem;
     background: var(--card);
     padding: 0.3rem;
     border-radius: 20px;
@@ -130,7 +212,7 @@ body {
 }
 
 .theme-btn {
-    width: 32px; height: 32px;
+    width: 30px; height: 30px;
     border-radius: 50%;
     border: none;
     cursor: pointer;
@@ -140,6 +222,7 @@ body {
     background: transparent;
     color: var(--text-muted);
     transition: all 0.3s;
+    font-size: 0.85rem;
 }
 
 .theme-btn.active {
@@ -147,7 +230,7 @@ body {
     color: white;
 }
 
-/* ---------- Hamburger Menu ---------- */
+/* ---------- Hamburger ---------- */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -229,14 +312,14 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 1rem 2rem;
+    padding: 0.9rem 1.8rem;
     border-radius: 50px;
     border: none;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-family: inherit;
 }
 
@@ -267,6 +350,11 @@ body {
     color: white;
 }
 
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
 /* ---------- Forms ---------- */
 .form-group {
     margin-bottom: 1.5rem;
@@ -283,7 +371,7 @@ body {
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 1rem;
+    padding: 0.9rem;
     border-radius: 12px;
     border: 2px solid rgba(99, 102, 241, 0.2);
     background: var(--darker);
@@ -476,9 +564,11 @@ body {
     .form-row { grid-template-columns: 1fr; }
     .section { padding: 5rem 1rem 1rem; }
     .notification { min-width: 250px; max-width: 90vw; }
+    .nav-controls { gap: 0.5rem; }
+    .lang-btn span { display: none; }
 }
 
-/* ---------- Neon Mode Specifics ---------- */
+/* ---------- Neon Mode ---------- */
 [data-theme="neon"] .card,
 [data-theme="neon"] .stat-card {
     background: rgba(18, 0, 56, 0.8);
@@ -487,3 +577,277 @@ body {
 [data-theme="neon"] .logo {
     text-shadow: 0 0 20px var(--neon-purple), 0 0 40px var(--neon-blue);
 }
+
+/* ---------- Chart Containers ---------- */
+.chart-container {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    position: relative;
+    height: 300px;
+}
+
+/* ---------- Social Feed ---------- */
+.feed-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.feed-post {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    transition: all 0.3s;
+}
+
+.feed-post:hover {
+    border-color: var(--primary);
+}
+
+.feed-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.feed-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.feed-meta {
+    flex: 1;
+}
+
+.feed-name {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feed-handle {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.badge-tsmid { background: rgba(0, 255, 136, 0.2); color: var(--neon-green); }
+.badge-tasmid { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+.badge-asmid { background: rgba(0, 243, 255, 0.2); color: var(--neon-blue); }
+.badge-bsmid { background: rgba(176, 38, 255, 0.2); color: var(--neon-purple); }
+
+.trust-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--neon-green);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.feed-content {
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.feed-actions {
+    display: flex;
+    gap: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.feed-action {
+    cursor: pointer;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.feed-action:hover { color: var(--primary); }
+
+/* ---------- Report System ---------- */
+.report-btn {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: var(--danger);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s;
+    font-family: inherit;
+}
+
+.report-btn:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.report-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.report-modal.show { display: flex; }
+
+.report-box {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+/* ---------- Search Bar ---------- */
+.search-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 0.9rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid rgba(99, 102, 241, 0.2);
+    background: var(--darker);
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.search-bar button {
+    padding: 0.9rem 1.5rem;
+    border-radius: 12px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+}
+
+/* ---------- Password Strength ---------- */
+.pw-strength {
+    height: 6px;
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    transition: all 0.3s;
+    background: var(--darker);
+}
+
+.pw-strength.weak { background: var(--danger); width: 33%; }
+.pw-strength.medium { background: var(--warning); width: 66%; }
+.pw-strength.strong { background: var(--neon-green); width: 100%; }
+
+.pw-label {
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    color: var(--text-muted);
+}
+
+/* ---------- QR Code Placeholder ---------- */
+.qr-placeholder {
+    width: 80px; height: 80px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.qr-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: 
+        linear-gradient(90deg, #333 0%, #333 20%, transparent 20%, transparent 40%, #333 40%, #333 60%, transparent 60%, transparent 80%, #333 80%, #333 100%),
+        linear-gradient(0deg, #333 0%, #333 20%, transparent 20%, transparent 40%, #333 40%, #333 60%, transparent 60%, transparent 80%, #333 80%, #333 100%);
+    background-size: 20px 20px;
+    opacity: 0.3;
+}
+
+/* ---------- Auth Forms ---------- */
+.auth-container {
+    max-width: 450px;
+    margin: 0 auto;
+    background: var(--card);
+    border-radius: 24px;
+    padding: 3rem;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.3s;
+}
+
+.auth-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.auth-panel { display: none; }
+.auth-panel.active { display: block; animation: fadeIn 0.3s ease; }
