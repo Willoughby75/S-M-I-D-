@@ -342,4 +342,412 @@ function setTheme(theme) {
 }
 
 function loadTheme() {
-    const saved = localStorage.getItem('smid
+    const saved = localStorage.getItem('smid_theme');
+    if (saved) {
+        document.body.setAttribute('data-theme', saved);
+        // Update active theme button
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if ((saved === 'dark' && btn.textContent.includes('🌙')) ||
+                (saved === 'light' && btn.textContent.includes('☀️')) ||
+                (saved === 'neon' && btn.textContent.includes('⚡'))) {
+                btn.classList.add('active');
+            }
+        });
+    } else {
+        // Default dark theme
+        document.body.setAttribute('data-theme', 'dark');
+        const darkBtn = document.querySelector('.theme-btn');
+        if (darkBtn) darkBtn.classList.add('active');
+    }
+}
+
+// ---------- LANGUAGE DROPDOWN ----------
+function toggleLangDropdown() {
+    const dropdown = document.getElementById('langDropdown');
+    if (dropdown) dropdown.classList.toggle('show');
+}
+
+function selectLang(lang) {
+    SMIDi18n.setLang(lang);
+    const dropdown = document.getElementById('langDropdown');
+    if (dropdown) dropdown.classList.remove('show');
+    const currentLang = document.getElementById('currentLang');
+    if (currentLang) {
+        const names = { en: 'English', fr: 'Français', es: 'Español', pt: 'Português', yo: 'Yorùbá', ar: 'العربية', zh: '中文' };
+        currentLang.textContent = names[lang] || 'English';
+    }
+    // Update active class in dropdown
+    document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+    });
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const switcher = document.querySelector('.lang-switcher');
+    const dropdown = document.getElementById('langDropdown');
+    if (switcher && dropdown && !switcher.contains(e.target)) {
+        dropdown.classList.remove('show');
+    }
+});
+
+// ---------- MOBILE MENU ----------
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const hamburger = document.querySelector('.hamburger');
+    if (menu) menu.classList.toggle('open');
+    if (hamburger) hamburger.classList.toggle('active');
+}
+
+// ---------- NOTIFICATIONS ----------
+function showNotification(title, text, type = 'info') {
+    const container = document.getElementById('notificationContainer');
+    if (!container) return;
+
+    const notif = document.createElement('div');
+    notif.className = `notification ${type}`;
+    notif.innerHTML = `
+        <div class="notification-title">${title}</div>
+        <div class="notification-text">${text}</div>
+    `;
+    container.appendChild(notif);
+
+    // Trigger animation
+    requestAnimationFrame(() => notif.classList.add('show'));
+
+    // Auto remove
+    setTimeout(() => {
+        notif.classList.remove('show');
+        setTimeout(() => notif.remove(), 400);
+    }, 4000);
+}
+
+// ---------- REPORT SYSTEM ----------
+function openReportModal(userId, userName) {
+    const modal = document.getElementById('reportModal');
+    const title = document.getElementById('reportTitle');
+    if (modal) modal.classList.add('show');
+    if (title) title.textContent = `${SMIDi18n.t('report_title')}: ${userName || ''}`;
+    modal.dataset.userId = userId || '';
+}
+
+function closeReportModal() {
+    const modal = document.getElementById('reportModal');
+    if (modal) modal.classList.remove('show');
+    const reason = document.getElementById('reportReason');
+    if (reason) reason.value = '';
+}
+
+function submitReport() {
+    const reason = document.getElementById('reportReason');
+    if (!reason || !reason.value) {
+        showNotification(SMIDi18n.t('notification_warning'), 'Please select a reason', 'warning');
+        return;
+    }
+    // Simulate report submission
+    showNotification(SMIDi18n.t('notification_success'), 'Report submitted successfully. Thank you for keeping SMID safe.', 'success');
+    closeReportModal();
+
+    // Store in local history
+    const reports = JSON.parse(localStorage.getItem('smid_reports') || '[]');
+    reports.push({ reason: reason.value, date: new Date().toISOString(), id: Date.now() });
+    localStorage.setItem('smid_reports', JSON.stringify(reports));
+}
+
+// ---------- CLOUD INFO ----------
+function showCloudInfo() {
+    const saved = JSON.parse(localStorage.getItem('smid_cloud') || '[]');
+    const count = saved.length;
+    showNotification(
+        SMIDi18n.t('notification_info'),
+        `Cloud Sync: ${count} items saved. Last sync: ${new Date().toLocaleTimeString()}`,
+        'info'
+    );
+}
+
+// ---------- AUTH SYSTEM ----------
+const SMIDAuth = {
+    users: JSON.parse(localStorage.getItem('smid_users') || '[]'),
+    currentUser: JSON.parse(localStorage.getItem('smid_current_user') || 'null'),
+
+    signup(name, email, password) {
+        if (!name || !email || !password) {
+            showNotification(SMIDi18n.t('notification_error'), 'Please fill all fields', 'error');
+            return false;
+        }
+        if (password.length < 6) {
+            showNotification(SMIDi18n.t('notification_error'), 'Password must be at least 6 characters', 'error');
+            return false;
+        }
+        if (this.users.find(u => u.email === email)) {
+            showNotification(SMIDi18n.t('notification_error'), 'Email already registered', 'error');
+            return false;
+        }
+        const user = {
+            id: 'smid_' + Date.now(),
+            name,
+            email,
+            password, // In real app, hash this!
+            createdAt: new Date().toISOString(),
+            verified: false,
+            category: null,
+            trustScore: 50
+        };
+        this.users.push(user);
+        localStorage.setItem('smid_users', JSON.stringify(this.users));
+        this.currentUser = user;
+        localStorage.setItem('smid_current_user', JSON.stringify(user));
+        showNotification(SMIDi18n.t('notification_success'), `Welcome, ${name}! Your account has been created.`, 'success');
+        updateAuthNav();
+        return true;
+    },
+
+    login(email, password) {
+        const user = this.users.find(u => u.email === email && u.password === password);
+        if (!user) {
+            showNotification(SMIDi18n.t('notification_error'), 'Invalid email or password', 'error');
+            return false;
+        }
+        this.currentUser = user;
+        localStorage.setItem('smid_current_user', JSON.stringify(user));
+        showNotification(SMIDi18n.t('notification_success'), `Welcome back, ${user.name}!`, 'success');
+        updateAuthNav();
+        return true;
+    },
+
+    logout() {
+        this.currentUser = null;
+        localStorage.removeItem('smid_current_user');
+        showNotification(SMIDi18n.t('notification_info'), 'You have been logged out.', 'info');
+        updateAuthNav();
+        setTimeout(() => window.location.href = 'index.html', 500);
+    },
+
+    getUser() {
+        if (!this.currentUser) {
+            this.currentUser = JSON.parse(localStorage.getItem('smid_current_user') || 'null');
+        }
+        return this.currentUser;
+    },
+
+    isLoggedIn() {
+        return !!this.getUser();
+    },
+
+    updateUser(updates) {
+        const user = this.getUser();
+        if (!user) return;
+        Object.assign(user, updates);
+        this.currentUser = user;
+        localStorage.setItem('smid_current_user', JSON.stringify(user));
+        // Update in users array too
+        const idx = this.users.findIndex(u => u.id === user.id);
+        if (idx >= 0) this.users[idx] = user;
+        localStorage.setItem('smid_users', JSON.stringify(this.users));
+    }
+};
+
+// ---------- PASSWORD STRENGTH ----------
+function checkPasswordStrength(password) {
+    const strengthBar = document.getElementById('pwStrength');
+    const strengthLabel = document.getElementById('pwLabel');
+    if (!strengthBar || !strengthLabel) return;
+
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (password.length >= 10) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+    strengthBar.className = 'pw-strength';
+    if (password.length === 0) {
+        strengthLabel.textContent = 'Enter password';
+    } else if (strength <= 2) {
+        strengthBar.classList.add('weak');
+        strengthLabel.textContent = `${SMIDi18n.t('pw_weak')} password`;
+    } else if (strength <= 4) {
+        strengthBar.classList.add('medium');
+        strengthLabel.textContent = `${SMIDi18n.t('pw_medium')} password`;
+    } else {
+        strengthBar.classList.add('strong');
+        strengthLabel.textContent = `${SMIDi18n.t('pw_strong')} password`;
+    }
+}
+
+// ---------- AUTH NAV ----------
+function updateAuthNav() {
+    const authNav = document.getElementById('authNav');
+    if (!authNav) return;
+
+    const user = SMIDAuth.getUser();
+    if (user) {
+        authNav.innerHTML = `
+            <div style="display:flex;align-items:center;gap:0.8rem;">
+                <span style="color:var(--text-muted);font-size:0.85rem;">${user.name}</span>
+                <button class="btn btn-sm btn-outline" onclick="SMIDAuth.logout()" data-i18n="nav_login">Logout</button>
+            </div>
+        `;
+    } else {
+        authNav.innerHTML = `
+            <a href="login.html" class="btn btn-sm btn-primary" data-i18n="nav_login">Login</a>
+        `;
+    }
+}
+
+// ---------- CLOUD SYNC ----------
+const SMIDCloud = {
+    getData() {
+        return JSON.parse(localStorage.getItem('smid_cloud') || '[]');
+    },
+
+    save(item) {
+        const data = this.getData();
+        item.savedAt = new Date().toISOString();
+        item.id = item.id || 'cloud_' + Date.now();
+        data.push(item);
+        localStorage.setItem('smid_cloud', JSON.stringify(data));
+        this.updateBadge();
+        showNotification(SMIDi18n.t('notification_success'), 'Saved to cloud', 'success');
+    },
+
+    remove(id) {
+        let data = this.getData();
+        data = data.filter(item => item.id !== id);
+        localStorage.setItem('smid_cloud', JSON.stringify(data));
+        this.updateBadge();
+    },
+
+    updateBadge() {
+        const badge = document.getElementById('savedCount');
+        if (badge) {
+            const count = this.getData().length;
+            badge.textContent = `(${count} ${SMIDi18n.t('cloud_saved') || 'saved'})`;
+        }
+    },
+
+    clear() {
+        localStorage.removeItem('smid_cloud');
+        this.updateBadge();
+    }
+};
+
+// ---------- SEARCH ----------
+function initSearch() {
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const items = document.querySelectorAll('[data-searchable]');
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(query) ? '' : 'none';
+        });
+    });
+}
+
+// ---------- SIMPLE CHART ----------
+function drawSimpleChart(canvasId, data, labels, color = '#6366f1') {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    const w = rect.width;
+    const h = rect.height;
+    const padding = 40;
+    const chartW = w - padding * 2;
+    const chartH = h - padding * 2;
+    const max = Math.max(...data) * 1.1;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Draw grid lines
+    ctx.strokeStyle = 'rgba(99,102,241,0.1)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+        const y = padding + (chartH / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(w - padding, y);
+        ctx.stroke();
+    }
+
+    // Draw line
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    data.forEach((val, i) => {
+        const x = padding + (chartW / (data.length - 1)) * i;
+        const y = padding + chartH - (val / max) * chartH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Draw points
+    ctx.fillStyle = color;
+    data.forEach((val, i) => {
+        const x = padding + (chartW / (data.length - 1)) * i;
+        const y = padding + chartH - (val / max) * chartH;
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        // White center
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = color;
+    });
+
+    // Labels
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted').trim() || '#94a3b8';
+    ctx.font = '12px Inter';
+    ctx.textAlign = 'center';
+    labels.forEach((label, i) => {
+        const x = padding + (chartW / (labels.length - 1)) * i;
+        ctx.fillText(label, x, h - 10);
+    });
+}
+
+// ---------- PAGE INIT ----------
+function initPage() {
+    SMIDi18n.load();
+    SMIDi18n.apply();
+    loadTheme();
+    updateAuthNav();
+    SMIDCloud.updateBadge();
+    initSearch();
+
+    // Set active nav link
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+
+    // Set current language display
+    const currentLang = document.getElementById('currentLang');
+    if (currentLang) {
+        const names = { en: 'English', fr: 'Français', es: 'Español', pt: 'Português', yo: 'Yorùbá', ar: 'العربية', zh: '中文' };
+        currentLang.textContent = names[SMIDi18n.current] || 'English';
+    }
+
+    // Mark active lang option
+    document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.getAttribute('data-lang') === SMIDi18n.current);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initPage);
