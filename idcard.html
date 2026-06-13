@@ -3,201 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMID - ID Card Generator</title>
+    <title>SMID - Digital ID Card</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .id-card-preview {
-            width: 440px;
-            height: 280px;
-            margin: 2rem auto;
-            border-radius: 16px;
+        .id-card-container {
+            max-width: 500px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+        .id-card {
+            background: linear-gradient(135deg, var(--card), var(--darker));
+            border-radius: 24px;
+            padding: 2rem;
+            border: 2px solid rgba(99, 102, 241, 0.3);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            font-family: 'Orbitron', monospace;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+            transition: transform 0.6s;
         }
-        .id-card-bg {
+        .id-card::before {
+            content: '';
             position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #1e1b4b, #312e81);
-        }
-        .id-card-pattern {
-            position: absolute;
-            inset: 0;
-            opacity: 0.1;
-            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px);
-        }
-        .id-card-content {
-            position: relative;
-            z-index: 2;
-            padding: 1.5rem;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99,102,241,0.1), transparent 30%);
+            animation: hologramSpin 8s linear infinite;
         }
         .id-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
         .id-card-logo {
-            font-size: 1.5rem;
+            font-family: 'Orbitron', monospace;
             font-weight: 900;
-            letter-spacing: 4px;
-            color: white;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--secondary), var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .id-card-chip {
-            width: 40px; height: 30px;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            width: 50px; height: 36px;
+            background: linear-gradient(135deg, #d4af37, #f0e68c, #d4af37);
             border-radius: 6px;
             position: relative;
+            overflow: hidden;
         }
         .id-card-chip::before {
             content: '';
             position: absolute;
-            top: 50%; left: 20%; right: 20%;
-            height: 1px;
-            background: rgba(0,0,0,0.3);
+            inset: 4px;
+            border: 1px solid rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+        .id-card-chip::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px; height: 20px;
+            border: 1px solid rgba(0,0,0,0.2);
+            border-radius: 50%;
         }
         .id-card-body {
+            position: relative;
+            z-index: 1;
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             align-items: center;
+            margin-bottom: 1.5rem;
         }
         .id-photo {
-            width: 80px; height: 80px;
-            border-radius: 12px;
-            border: 3px solid rgba(255,255,255,0.3);
-            object-fit: cover;
-            background: #334155;
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 3rem;
+            border: 3px solid rgba(255,255,255,0.1);
             flex-shrink: 0;
         }
         .id-info { flex: 1; }
         .id-name {
-            font-size: 1.1rem;
+            font-family: 'Orbitron', monospace;
             font-weight: 700;
-            color: white;
+            font-size: 1.2rem;
             margin-bottom: 0.3rem;
-            word-break: break-word;
         }
-        .id-type {
-            font-size: 0.75rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            display: inline-block;
+        .id-role {
+            font-size: 0.85rem;
+            color: var(--primary-glow);
             margin-bottom: 0.5rem;
-            background: rgba(99,102,241,0.3);
-            color: white;
         }
         .id-number {
+            font-family: 'Orbitron', monospace;
             font-size: 0.75rem;
-            color: rgba(255,255,255,0.7);
+            color: var(--text-muted);
             letter-spacing: 2px;
         }
-        .id-trust {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            color: var(--neon-green);
-            background: rgba(0,255,136,0.15);
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-        }
         .id-card-footer {
+            position: relative;
+            z-index: 1;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.65rem;
-            color: rgba(255,255,255,0.6);
+            padding-top: 1rem;
+            border-top: 1px solid rgba(99,102,241,0.2);
         }
-        .id-hologram {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.4), transparent, rgba(255,255,255,0.4), transparent);
-            animation: hologramSpin 4s linear infinite;
+        .id-valid {
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
-        .qr-section {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .qr-code {
-            width: 50px; height: 50px;
-            background: white;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .qr-code::before {
-            content: '';
-            position: absolute;
-            inset: 3px;
-            background: 
-                linear-gradient(90deg, #333 0%, #333 25%, transparent 25%, transparent 50%, #333 50%, #333 75%, transparent 75%, transparent 100%),
-                linear-gradient(0deg, #333 0%, #333 25%, transparent 25%, transparent 50%, #333 50%, #333 75%, transparent 75%, transparent 100%);
-            background-size: 12px 12px;
-            opacity: 0.4;
-        }
-        .qr-code::after {
-            content: 'SMID';
-            position: absolute;
-            font-size: 0.5rem;
-            color: #333;
-            font-weight: 700;
-        }
-        .card-settings {
-            max-width: 500px;
-            margin: 2rem auto;
-            background: var(--card);
-            border-radius: 16px;
-            padding: 1.5rem;
-        }
-        .card-actions {
+        .id-valid strong { color: var(--neon-green); }
+        .id-actions {
             display: flex;
             gap: 1rem;
             justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
+            margin-top: 2rem;
         }
-        .history-list {
-            max-width: 600px;
-            margin: 2rem auto;
+        .scan-line {
+            position: absolute;
+            left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            animation: scanMove 3s ease-in-out infinite;
+            z-index: 2;
+            opacity: 0.6;
         }
-        .history-item {
+        .id-back {
             background: var(--card);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 0.8rem;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            margin-top: 1.5rem;
+        }
+        .id-back-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--primary-glow);
+        }
+        .id-qr-row {
             display: flex;
-            justify-content: space-between;
+            gap: 1.5rem;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid transparent;
         }
-        .history-item:hover {
-            border-color: var(--primary);
-            transform: translateX(5px);
-        }
-        .history-item.active {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
+        .id-qr-info { flex: 1; }
+        .id-qr-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
         }
         @media (max-width: 768px) {
-            .id-card-preview { width: 100%; max-width: 350px; height: 220px; }
-            .id-name { font-size: 0.9rem; }
-            .id-photo { width: 60px; height: 60px; font-size: 2rem; }
-            .qr-code { width: 40px; height: 40px; }
+            .id-card-body { flex-direction: column; text-align: center; }
+            .id-qr-row { flex-direction: column; }
         }
     </style>
 </head>
@@ -257,19 +221,13 @@
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Your SMID Identity Card</h2>
-            <p class="section-subtitle">Generate and customize your verified digital ID</p>
+            <h2 class="section-title">Digital ID Card</h2>
+            <p class="section-subtitle">Your SMID verification credential</p>
 
-            <div class="card-actions">
-                <button class="btn btn-primary" onclick="generateIDCard()">🎨 Generate from Latest</button>
-                <button class="btn btn-outline" onclick="downloadIDCard()">⬇ Download Card</button>
-                <button class="btn btn-outline" onclick="window.location.href='register.html'">📝 New Registration</button>
-            </div>
-
-            <div class="id-card-preview" id="idCardPreview">
-                <div class="id-card-bg" id="idCardBg"></div>
-                <div class="id-card-pattern"></div>
-                <div class="id-card-content">
+            <div class="id-card-container">
+                <!-- Front -->
+                <div class="id-card" id="idCardFront">
+                    <div class="scan-line"></div>
                     <div class="id-card-header">
                         <div class="id-card-logo">SMID</div>
                         <div class="id-card-chip"></div>
@@ -277,48 +235,38 @@
                     <div class="id-card-body">
                         <div class="id-photo" id="idPhoto">👤</div>
                         <div class="id-info">
-                            <div class="id-name" id="idName">YOUR NAME</div>
-                            <span class="id-type" id="idType">SELECT CATEGORY</span>
-                            <div class="id-number" id="idNumber">SMID-XXXX-XXXX-XXXX</div>
-                            <div class="id-trust">
-                                <span>🛡️</span> Trust: <span id="idTrustScore">--</span>
-                            </div>
-                        </div>
-                        <div class="qr-section">
-                            <div class="qr-code" title="Scan to verify"></div>
+                            <div class="id-name" id="idName">Guest User</div>
+                            <div class="id-role" id="idRole">Unverified</div>
+                            <div class="id-number" id="idNumber">SMID-0000000000</div>
                         </div>
                     </div>
                     <div class="id-card-footer">
-                        <span id="idIssueDate">Issued: --/--/----</span>
-                        <div class="id-hologram"></div>
-                        <span>SECURE BY DESIGN</span>
+                        <div class="id-valid">
+                            <div>ISSUED: <strong id="idIssued">--/--/----</strong></div>
+                            <div>EXPIRES: <strong id="idExpires">--/--/----</strong></div>
+                        </div>
+                        <div class="verified-badge" id="idBadge" style="display:none;">✓ Verified</div>
                     </div>
                 </div>
-            </div>
 
-            <div class="card-settings">
-                <h4 style="margin-bottom: 1rem; font-family: 'Orbitron', monospace;">Card Settings</h4>
-                <div class="form-group">
-                    <label>Display Name Override</label>
-                    <input type="text" id="cardNameInput" placeholder="Leave empty to use registered name" oninput="updateCardPreview()">
+                <!-- Back -->
+                <div class="id-back" id="idCardBack">
+                    <div class="id-back-title">Verification Details</div>
+                    <div class="id-qr-row">
+                        <div class="qr-placeholder" id="idQR">QR</div>
+                        <div class="id-qr-info">
+                            <p><strong>Category:</strong> <span id="idBackCategory">-</span></p>
+                            <p><strong>Trust Score:</strong> <span id="idBackTrust">-</span></p>
+                            <p><strong>Email:</strong> <span id="idBackEmail">-</span></p>
+                            <p style="font-size:0.75rem;margin-top:0.5rem;">Scan to verify authenticity on smid.platform</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Card Theme</label>
-                    <select id="cardTheme" onchange="updateCardTheme()">
-                        <option value="blue">SMID Blue (Default)</option>
-                        <option value="green">TSMID Green</option>
-                        <option value="orange">TASMID Orange</option>
-                        <option value="cyan">ASMID Cyan</option>
-                        <option value="purple">BSMID Purple</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="history-list" id="historyList">
-                <h4 style="text-align: center; margin-bottom: 1rem; font-family: 'Orbitron', monospace;">Your Registrations</h4>
-                <div class="empty-state" style="padding: 2rem;">
-                    <div style="font-size: 2.5rem;">🎴</div>
-                    <p>No ID cards generated yet. Complete a <a href="register.html" style="color: var(--primary);">registration</a> first.</p>
+                <div class="id-actions">
+                    <button class="btn btn-primary" onclick="downloadID()">📥 Download</button>
+                    <button class="btn btn-outline" onclick="shareID()">📤 Share</button>
+                    <button class="btn btn-outline" onclick="flipCard()">🔄 Flip</button>
                 </div>
             </div>
         </div>
@@ -338,102 +286,78 @@
 
     <script src="shared.js"></script>
     <script>
-        let currentRecord = null;
+        function loadIDCard() {
+            const user = SMIDAuth.getUser();
+            const now = new Date();
+            const expires = new Date(now.getFullYear() + 2, now.getMonth(), now.getDate());
 
-        function renderHistory() {
-            const data = SMIDCloud.getAll();
-            const container = document.getElementById('historyList');
-            if (data.length === 0) {
-                container.innerHTML = `
-                    <h4 style="text-align: center; margin-bottom: 1rem; font-family: 'Orbitron', monospace;">Your Registrations</h4>
-                    <div class="empty-state" style="padding: 2rem;">
-                        <div style="font-size: 2.5rem;">🎴</div>
-                        <p>No ID cards generated yet. Complete a <a href="register.html" style="color: var(--primary);">registration</a> first.</p>
-                    </div>`;
-                return;
+            if (user) {
+                document.getElementById('idName').textContent = user.name || 'User';
+                document.getElementById('idPhoto').textContent = (user.name?.[0] || '👤').toUpperCase();
+                document.getElementById('idNumber').textContent = user.id || 'SMID-0000000000';
+                document.getElementById('idIssued').textContent = now.toLocaleDateString();
+                document.getElementById('idExpires').textContent = expires.toLocaleDateString();
+                document.getElementById('idBackEmail').textContent = user.email || '-';
+                document.getElementById('idBackTrust').textContent = (user.trustScore || 50) + '/100';
+
+                const catNames = { tsmid: 'TSMID (Teen)', tasmid: 'TASMID (Student)', asmid: 'ASMID (Adult)', bsmid: 'BSMID (Business)' };
+                document.getElementById('idBackCategory').textContent = catNames[user.category] || (user.category || 'Not selected');
+
+                const badge = document.getElementById('idBadge');
+                const role = document.getElementById('idRole');
+                if (user.verified === true) {
+                    badge.style.display = 'inline-flex';
+                    badge.className = 'verified-badge badge-asmid';
+                    badge.innerHTML = '✓ Verified';
+                    role.textContent = 'Verified Identity';
+                    role.style.color = 'var(--neon-green)';
+                } else if (user.verified === 'pending') {
+                    badge.style.display = 'inline-flex';
+                    badge.className = 'verified-badge';
+                    badge.style.background = 'rgba(245,158,11,0.2)';
+                    badge.style.color = 'var(--warning)';
+                    badge.innerHTML = '⏳ Pending';
+                    role.textContent = 'Verification Pending';
+                    role.style.color = 'var(--warning)';
+                } else {
+                    badge.style.display = 'none';
+                    role.textContent = 'Unverified';
+                    role.style.color = 'var(--text-muted)';
+                }
+            } else {
+                document.getElementById('idIssued').textContent = now.toLocaleDateString();
+                document.getElementById('idExpires').textContent = expires.toLocaleDateString();
             }
-            const badgeColors = { tsmid: 'var(--neon-green)', tasmid: 'var(--warning)', asmid: 'var(--neon-blue)', bsmid: 'var(--neon-purple)' };
-            let html = `<h4 style="text-align: center; margin-bottom: 1rem; font-family: 'Orbitron', monospace;">Your Registrations</h4>`;
-            data.slice().reverse().forEach((r, idx) => {
-                const color = badgeColors[r.category] || 'var(--primary)';
-                html += `<div class="history-item" onclick="loadRecord(${data.length - 1 - idx})" data-idx="${data.length - 1 - idx}">
-                    <div>
-                        <div style="font-weight: 700;">${r.name || 'Unknown'}</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">${r.id}</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="color: ${color}; font-weight: 700; font-size: 0.85rem; text-transform: uppercase;">${r.category}</div>
-                        <div style="font-size: 0.8rem; color: var(--neon-green);">Trust: ${r.trustScore}</div>
-                    </div>
-                </div>`;
-            });
-            container.innerHTML = html;
         }
 
-        function loadRecord(index) {
-            const data = SMIDCloud.getAll();
-            if (!data[index]) return;
-            currentRecord = data[index];
-            document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
-            const item = document.querySelector(`.history-item[data-idx="${index}"]`);
-            if (item) item.classList.add('active');
-            applyRecordToCard(currentRecord);
-            showNotification('Card Loaded', `Loaded ID for ${currentRecord.name}`, 'success');
+        function downloadID() {
+            showNotification('Success', 'ID Card downloaded as PDF (simulated)', 'success');
         }
 
-        function generateIDCard() {
-            const latest = SMIDCloud.getLatest();
-            if (!latest) { showNotification('No Data', 'Please complete registration first', 'warning'); return; }
-            currentRecord = latest;
-            applyRecordToCard(latest);
-            const themeMap = { tsmid: 'green', tasmid: 'orange', asmid: 'cyan', bsmid: 'purple' };
-            if (themeMap[latest.category]) { document.getElementById('cardTheme').value = themeMap[latest.category]; updateCardTheme(); }
-            renderHistory();
-            showNotification('ID Card Generated', 'Your digital identity card is ready', 'success');
+        function shareID() {
+            const user = SMIDAuth.getUser();
+            const text = user ? 
+                `I'm verified on SMID! Check my digital identity: ${user.id}` : 
+                'Join SMID for verified digital identity.';
+            if (navigator.share) {
+                navigator.share({ title: 'My SMID ID', text: text });
+            } else {
+                navigator.clipboard.writeText(text);
+                showNotification('Success', 'ID link copied to clipboard!', 'success');
+            }
         }
 
-        function applyRecordToCard(record) {
-            document.getElementById('idName').textContent = record.name || 'USER NAME';
-            document.getElementById('idType').textContent = (record.category || 'UNKNOWN').toUpperCase();
-            document.getElementById('idNumber').textContent = record.id || 'SMID-XXXX-XXXX-XXXX';
-            document.getElementById('idTrustScore').textContent = record.trustScore || '--';
-            document.getElementById('idIssueDate').textContent = 'Issued: ' + (record.timestamp ? new Date(record.timestamp).toLocaleDateString() : '--/--/----');
-            const photoEl = document.getElementById('idPhoto');
-            if (record.faceImage) {
-                photoEl.innerHTML = `<img src="${record.faceImage}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;" alt="Photo">`;
-            } else { photoEl.textContent = '👤'; }
+        let flipped = false;
+        function flipCard() {
+            flipped = !flipped;
+            const front = document.getElementById('idCardFront');
+            const back = document.getElementById('idCardBack');
+            front.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+            back.style.transform = flipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
+            back.style.display = flipped ? 'block' : 'block';
         }
 
-        function updateCardPreview() {
-            const name = document.getElementById('cardNameInput').value;
-            if (name) document.getElementById('idName').textContent = name;
-        }
-
-        function updateCardTheme() {
-            const theme = document.getElementById('cardTheme').value;
-            const bg = document.getElementById('idCardBg');
-            const type = document.getElementById('idType');
-            const themes = {
-                blue: ['#1e1b4b', '#312e81', 'rgba(99,102,241,0.3)'],
-                green: ['#064e3b', '#065f46', 'rgba(0,255,136,0.3)'],
-                orange: ['#7c2d12', '#9a3412', 'rgba(245,158,11,0.3)'],
-                cyan: ['#164e63', '#155e75', 'rgba(0,243,255,0.3)'],
-                purple: ['#581c87', '#6b21a8', 'rgba(176,38,255,0.3)']
-            };
-            const t = themes[theme];
-            bg.style.background = `linear-gradient(135deg, ${t[0]}, ${t[1]})`;
-            type.style.background = t[2];
-        }
-
-        function downloadIDCard() {
-            showNotification('Download Started', 'ID card saved as PNG (simulated)', 'success');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderHistory();
-            const latest = SMIDCloud.getLatest();
-            if (latest) { currentRecord = latest; applyRecordToCard(latest); }
-        });
+        document.addEventListener('DOMContentLoaded', loadIDCard);
     </script>
 </body>
 </html>
