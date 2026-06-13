@@ -1,8 +1,4 @@
-
-# ============================================
-# UPGRADED SHARED JS (shared.js v2) — with i18n, auth, charts, search, reports
-# ============================================
-js_v2 = """// ============================================
+"""// ============================================
 // SMID PLATFORM v2 — UPGRADED SHARED JS
 // i18n + Auth + Charts + Search + Reports + Notifications
 // ============================================
