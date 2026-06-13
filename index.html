@@ -1,18 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMID - Social Media Identification</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Home Page Specific Styles */
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            animation: fadeIn 0.8s ease;
-        }
-
+        .hero { text-align: center; padding: 4rem 0; animation: fadeIn 0.8s ease; }
         .animated-title {
             font-family: 'Orbitron', monospace;
             font-size: clamp(3rem, 8vw, 6rem);
@@ -20,7 +14,6 @@
             letter-spacing: 20px;
             margin-bottom: 1rem;
         }
-
         .animated-title span {
             display: inline-block;
             animation: letterFloat 3s ease-in-out infinite;
@@ -29,17 +22,14 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .animated-title span:nth-child(1) { animation-delay: 0s; }
         .animated-title span:nth-child(2) { animation-delay: 0.2s; }
         .animated-title span:nth-child(3) { animation-delay: 0.4s; }
         .animated-title span:nth-child(4) { animation-delay: 0.6s; }
-
         @keyframes letterFloat {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
-
         .hero-subtitle {
             font-size: 1.3rem;
             color: var(--text-muted);
@@ -48,21 +38,13 @@
             margin-left: auto;
             margin-right: auto;
         }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
         .vision-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 2rem;
             margin: 3rem 0;
         }
-
         .vision-card {
             background: var(--card);
             border-radius: 20px;
@@ -71,16 +53,13 @@
             border: 1px solid rgba(99, 102, 241, 0.1);
             transition: all 0.3s;
         }
-
         .vision-card:hover {
             transform: translateY(-8px);
             border-color: var(--primary);
             box-shadow: 0 10px 40px rgba(99, 102, 241, 0.15);
         }
-
         .vision-icon {
-            width: 70px;
-            height: 70px;
+            width: 70px; height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -89,18 +68,8 @@
             margin: 0 auto 1rem;
             background: rgba(99, 102, 241, 0.1);
         }
-
-        .vision-title {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
-
-        .vision-text {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
+        .vision-title { font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+        .vision-text { color: var(--text-muted); font-size: 0.9rem; }
         .problem-section {
             background: var(--card);
             border-radius: 24px;
@@ -108,45 +77,22 @@
             margin-top: 3rem;
             border: 1px solid rgba(99, 102, 241, 0.2);
         }
-
         .problem-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
-
-        .problem-item {
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-        }
-
-        .problem-x {
-            color: var(--danger);
-            font-size: 1.5rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .problem-item strong {
-            color: var(--text);
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-
-        .problem-item p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
+        .problem-item { display: flex; align-items: start; gap: 1rem; }
+        .problem-x { color: var(--danger); font-size: 1.5rem; font-weight: 700; flex-shrink: 0; }
+        .problem-item strong { color: var(--text); display: block; margin-bottom: 0.3rem; }
+        .problem-item p { color: var(--text-muted); font-size: 0.9rem; }
         .mission-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
-
         .mission-card {
             background: var(--card);
             border-radius: 16px;
@@ -156,10 +102,8 @@
             gap: 1.5rem;
             border: 1px solid rgba(99, 102, 241, 0.1);
         }
-
         .mission-icon {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -168,21 +112,29 @@
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             flex-shrink: 0;
         }
-
         .mission-label {
             font-family: 'Orbitron', monospace;
             font-size: 0.9rem;
             color: var(--primary-glow);
             margin-bottom: 0.3rem;
         }
-
-        .mission-text {
-            color: var(--text-muted);
-            font-size: 0.9rem;
+        .mission-text { color: var(--text-muted); font-size: 0.9rem; }
+        .feed-section { margin-top: 4rem; }
+        .feed-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
-
+        .feed-header-bar h3 {
+            font-family: 'Orbitron', monospace;
+            color: var(--primary-glow);
+        }
         @media (max-width: 768px) {
             .animated-title { letter-spacing: 10px; }
+            .mission-card { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -190,167 +142,255 @@
     <canvas id="particle-canvas"></canvas>
     <div class="notification-container" id="notificationContainer"></div>
 
-    <!-- Navigation -->
     <nav class="navbar">
         <a href="index.html" class="logo">SMID</a>
         <div class="nav-links">
-            <a href="index.html" class="active">Home</a>
-            <a href="prototype.html">Categories</a>
-            <a href="register.html">Register</a>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="idcard.html">ID Card</a>
-            <a href="cloud.html">Cloud</a>
-            <a href="founder.html">Founder</a>
-            <div class="theme-toggle">
-                <button class="theme-btn" onclick="setTheme('dark')" title="Dark">🌙</button>
-                <button class="theme-btn" onclick="setTheme('light')" title="Light">☀️</button>
-                <button class="theme-btn" onclick="setTheme('neon')" title="Neon">⚡</button>
-            </div>
+            <a href="index.html" class="active" data-i18n="nav_home">Home</a>
+            <a href="prototype.html" data-i18n="nav_categories">Categories</a>
+            <a href="register.html" data-i18n="nav_register">Register</a>
+            <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
+            <a href="idcard.html" data-i18n="nav_idcard">ID Card</a>
+            <a href="cloud.html" data-i18n="nav_cloud">Cloud</a>
+            <a href="founder.html" data-i18n="nav_founder">Founder</a>
         </div>
-        <div class="hamburger" onclick="toggleMobileMenu()">
-            <span></span><span></span><span></span>
+        <div class="nav-controls">
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="toggleLangDropdown()">
+                    <span>🌐</span>
+                    <span id="currentLang">English</span>
+                    <span>▼</span>
+                </button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <div class="lang-option" data-lang="en" onclick="selectLang('en')">🇺🇸 English</div>
+                    <div class="lang-option" data-lang="fr" onclick="selectLang('fr')">🇫🇷 Français</div>
+                    <div class="lang-option" data-lang="es" onclick="selectLang('es')">🇪🇸 Español</div>
+                    <div class="lang-option" data-lang="pt" onclick="selectLang('pt')">🇧🇷 Português</div>
+                    <div class="lang-option" data-lang="yo" onclick="selectLang('yo')">🇳🇬 Yorùbá</div>
+                    <div class="lang-option" data-lang="ar" onclick="selectLang('ar')">🇸🇦 العربية</div>
+                    <div class="lang-option" data-lang="zh" onclick="selectLang('zh')">🇨🇳 中文</div>
+                </div>
+            </div>
+            <div class="theme-toggle">
+                <button class="theme-btn" onclick="setTheme('dark')">🌙</button>
+                <button class="theme-btn" onclick="setTheme('light')">☀️</button>
+                <button class="theme-btn" onclick="setTheme('neon')">⚡</button>
+            </div>
+            <div id="authNav"></div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span><span></span><span></span>
+            </div>
         </div>
     </nav>
 
     <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">Home</a>
-        <a href="prototype.html">Categories</a>
-        <a href="register.html">Register</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="idcard.html">ID Card</a>
-        <a href="cloud.html">Cloud</a>
-        <a href="founder.html">Founder</a>
+        <a href="index.html" data-i18n="nav_home">Home</a>
+        <a href="prototype.html" data-i18n="nav_categories">Categories</a>
+        <a href="register.html" data-i18n="nav_register">Register</a>
+        <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
+        <a href="idcard.html" data-i18n="nav_idcard">ID Card</a>
+        <a href="cloud.html" data-i18n="nav_cloud">Cloud</a>
+        <a href="founder.html" data-i18n="nav_founder">Founder</a>
     </div>
 
-    <!-- Hero Section -->
     <section class="section">
         <div class="container">
             <div class="hero">
                 <h1 class="animated-title">
                     <span>S</span><span>M</span><span>I</span><span>D</span>
                 </h1>
-                <p class="hero-subtitle">Building Trust. Protecting Identity. Creating a Safer Digital World.</p>
+                <p class="hero-subtitle" data-i18n="hero_title">Building Trust. Protecting Identity. Creating a Safer Digital World.</p>
                 <div class="hero-buttons">
-                    <a href="register.html" class="btn btn-primary"><span>🛡️</span> Get Verified</a>
-                    <a href="prototype.html" class="btn btn-outline"><span>📋</span> View Categories</a>
+                    <a href="register.html" class="btn btn-primary"><span>🛡️</span> <span data-i18n="hero_cta_verify">Get Verified</span></a>
+                    <a href="prototype.html" class="btn btn-outline"><span>📋</span> <span data-i18n="hero_cta_view">View Categories</span></a>
                 </div>
             </div>
 
-            <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-value">$500B+</div>
-                    <div class="stat-label">Lost to Online Fraud Yearly</div>
+                    <div class="stat-label" data-i18n="stats_fraud">Lost to Online Fraud Yearly</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">70%</div>
-                    <div class="stat-label">Users Worry About Fake Accounts</div>
+                    <div class="stat-label" data-i18n="stats_worry">Users Worry About Fake Accounts</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">Millions</div>
-                    <div class="stat-label">Impacted by Scams Daily</div>
+                    <div class="stat-label" data-i18n="stats_impact">Impacted by Scams Daily</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">Billions</div>
-                    <div class="stat-label">Spent on Moderation</div>
+                    <div class="stat-label" data-i18n="stats_moderation">Spent on Moderation</div>
                 </div>
             </div>
 
-            <!-- Vision -->
             <div class="vision-grid">
                 <div class="vision-card">
                     <div class="vision-icon">👁️</div>
-                    <div class="vision-title">Verify Real Identities</div>
-                    <div class="vision-text">Cryptographic proof that every account belongs to a real person.</div>
+                    <div class="vision-title" data-i18n="vision_verify">Verify Real Identities</div>
+                    <div class="vision-text" data-i18n="vision_verify">Cryptographic proof that every account belongs to a real person.</div>
                 </div>
                 <div class="vision-card">
                     <div class="vision-icon">🔐</div>
-                    <div class="vision-title">Promote Authenticity</div>
-                    <div class="vision-text">Trust scores and verification badges across all platforms.</div>
+                    <div class="vision-title" data-i18n="vision_authentic">Promote Authenticity</div>
+                    <div class="vision-text" data-i18n="vision_authentic">Trust scores and verification badges across all platforms.</div>
                 </div>
                 <div class="vision-card">
                     <div class="vision-icon">🛡️</div>
-                    <div class="vision-title">Enhance User Safety</div>
-                    <div class="vision-text">Protect vulnerable users with age-appropriate verification tiers.</div>
+                    <div class="vision-title" data-i18n="vision_safety">Enhance User Safety</div>
+                    <div class="vision-text" data-i18n="vision_safety">Protect vulnerable users with age-appropriate verification tiers.</div>
                 </div>
                 <div class="vision-card">
                     <div class="vision-icon">🤝</div>
-                    <div class="vision-title">Build Accountability</div>
-                    <div class="vision-text">Real consequences for abuse, scams, and impersonation.</div>
+                    <div class="vision-title" data-i18n="vision_accountability">Build Accountability</div>
+                    <div class="vision-text" data-i18n="vision_accountability">Real consequences for abuse, scams, and impersonation.</div>
                 </div>
             </div>
 
-            <!-- Problem Section -->
             <div class="problem-section">
-                <h2 style="font-family: 'Orbitron', monospace; font-size: 1.5rem; text-align: center; color: var(--danger);">
-                    ⚠️ The Problem We're Solving
-                </h2>
+                <h2 style="font-family: 'Orbitron', monospace; font-size: 1.5rem; text-align: center; color: var(--danger);" data-i18n="problem_title">⚠️ The Problem We're Solving</h2>
                 <div class="problem-grid">
                     <div class="problem-item">
                         <span class="problem-x">✕</span>
                         <div>
-                            <strong>Fake Accounts</strong>
-                            <p>Impersonation and fraudulent profiles are everywhere.</p>
+                            <strong data-i18n="problem_fake">Fake Accounts</strong>
+                            <p data-i18n="problem_fake">Impersonation and fraudulent profiles are everywhere.</p>
                         </div>
                     </div>
                     <div class="problem-item">
                         <span class="problem-x">✕</span>
                         <div>
-                            <strong>Rising Scams</strong>
-                            <p>Misinformation and online abuse continue to grow unchecked.</p>
+                            <strong data-i18n="problem_scams">Rising Scams</strong>
+                            <p data-i18n="problem_scams">Misinformation and online abuse continue to grow unchecked.</p>
                         </div>
                     </div>
                     <div class="problem-item">
                         <span class="problem-x">✕</span>
                         <div>
-                            <strong>Lost Trust</strong>
-                            <p>Users don't know who to trust anymore.</p>
+                            <strong data-i18n="problem_trust">Lost Trust</strong>
+                            <p data-i18n="problem_trust">Users don't know who to trust anymore.</p>
                         </div>
                     </div>
                     <div class="problem-item">
                         <span class="problem-x">✕</span>
                         <div>
-                            <strong>Business Losses</strong>
-                            <p>Companies lose money and reputation daily.</p>
+                            <strong data-i18n="problem_business">Business Losses</strong>
+                            <p data-i18n="problem_business">Companies lose money and reputation daily.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Mission & Goal -->
             <div class="mission-bar">
                 <div class="mission-card">
                     <div class="mission-icon">🎯</div>
                     <div>
-                        <div class="mission-label">GOAL</div>
-                        <div class="mission-text">Create a scalable solution that improves trust and accountability online, delivering value to users, platforms, and businesses.</div>
+                        <div class="mission-label" data-i18n="goal_title">GOAL</div>
+                        <div class="mission-text" data-i18n="goal_title">Create a scalable solution that improves trust and accountability online, delivering value to users, platforms, and businesses.</div>
                     </div>
                 </div>
                 <div class="mission-card">
                     <div class="mission-icon">💜</div>
                     <div>
-                        <div class="mission-label">MISSION</div>
-                        <div class="mission-text">Make the internet a place where real people can connect, create, and grow with confidence.</div>
+                        <div class="mission-label" data-i18n="mission_title">MISSION</div>
+                        <div class="mission-text" data-i18n="mission_title">Make the internet a place where real people can connect, create, and grow with confidence.</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Social Feed Preview -->
+            <div class="feed-section">
+                <div class="feed-header-bar">
+                    <h3>🌐 Trusted Social Feed</h3>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">See how SMID verification appears on social platforms</span>
+                </div>
+                <div class="feed-container" id="feedContainer">
+                    <!-- Populated by JS -->
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <p style="font-family: 'Orbitron', monospace; font-size: 1.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SMID</p>
         <p>Identity Today, Safety Tomorrow.</p>
         <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 SMID Platform. Founded by Oluwatosin Abraham Willoughby. All rights reserved.</p>
     </footer>
 
-    <!-- Cloud Status -->
     <div class="cloud-status" onclick="showCloudInfo()">
         <div class="cloud-dot"></div>
-        <span>Cloud Sync: Active</span>
+        <span data-i18n="cloud_sync">Cloud Sync: Active</span>
         <span id="savedCount" style="color: var(--text-muted); font-size: 0.75rem;">(0 saved)</span>
     </div>
 
     <script src="shared.js"></script>
+    <script>
+        // Populate social feed with demo data
+        const demoUsers = [
+            { name: 'Sarah Chen', handle: '@sarahchen', category: 'asmid', trust: 96, avatar: '👩‍💻', content: 'Just got my SMID verification! Now my followers know I\'m the real deal. #VerifiedIdentity #SMID' },
+            { name: 'TechStart Inc.', handle: '@techstart', category: 'bsmid', trust: 94, avatar: '🏢', content: 'Our business is now SMID verified. Customers can trust they\'re dealing with the real TechStart. #TrustedBusiness' },
+            { name: 'Jamal O.', handle: '@jamalo_17', category: 'tsmid', trust: 88, avatar: '🎮', content: 'My parents helped me get TSMID verified so I can safely join gaming communities! 🛡️ #SafeTeen' },
+            { name: 'Maria Santos', handle: '@mariasantos', category: 'tasmid', trust: 91, avatar: '🎓', content: 'As a university student, TASMID verification helps me network with confidence. #StudentVerified' },
+            { name: 'GlobalTrade LLC', handle: '@globaltrade', category: 'bsmid', trust: 97, avatar: '🌐', content: 'BSMID verification has reduced fraud inquiries by 80%. Best investment for our online reputation. #BusinessTrust' }
+        ];
+
+        const badgeClasses = { tsmid: 'badge-tsmid', tasmid: 'badge-tasmid', asmid: 'badge-asmid', bsmid: 'badge-bsmid' };
+        const badgeLabels = { tsmid: 'TSMID', tasmid: 'TASMID', asmid: 'ASMID', bsmid: 'BSMID' };
+
+        function renderFeed() {
+            const container = document.getElementById('feedContainer');
+            container.innerHTML = demoUsers.map((u, i) => `
+                <div class="feed-post">
+                    <div class="feed-header">
+                        <div class="feed-avatar">${u.avatar}</div>
+                        <div class="feed-meta">
+                            <div class="feed-name">
+                                ${u.name}
+                                <span class="verified-badge ${badgeClasses[u.category]}">✓ ${badgeLabels[u.category]}</span>
+                                <span class="trust-pill">🛡️ ${u.trust}</span>
+                            </div>
+                            <div class="feed-handle">${u.handle} · 2h ago</div>
+                        </div>
+                        <button class="report-btn" onclick="openReportModal('demo-${i}', '${u.name}')">🚩 Report</button>
+                    </div>
+                    <div class="feed-content">${u.content}</div>
+                    <div class="feed-actions">
+                        <span class="feed-action">💬 12</span>
+                        <span class="feed-action">🔄 8</span>
+                        <span class="feed-action">❤️ 45</span>
+                        <span class="feed-action">📤 Share</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderFeed();
+    </script>
+
+    <!-- Report Modal -->
+    <div class="report-modal" id="reportModal">
+        <div class="report-box">
+            <h3 id="reportTitle" data-i18n="report_title">Report User</h3>
+            <div class="form-group">
+                <label data-i18n="report_reason">Reason for report</label>
+                <select id="reportReason">
+                    <option value="">Select reason...</option>
+                    <option value="impersonation">Impersonation / Fake Account</option>
+                    <option value="harassment">Harassment or Abuse</option>
+                    <option value="scam">Scam or Fraud</option>
+                    <option value="misinformation">Misinformation</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Additional Details</label>
+                <textarea rows="3" placeholder="Provide more context..."></textarea>
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button class="btn btn-outline" onclick="closeReportModal()" data-i18n="report_cancel">Cancel</button>
+                <button class="btn btn-danger" onclick="submitReport()" data-i18n="report_submit">Submit Report</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
