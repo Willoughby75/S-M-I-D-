@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMID - About the Founder</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Founder Page Specific Styles */
+        .founder-hero {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .founder-photo-card {
+            position: relative;
+            text-align: center;
+        }
+
+        .founder-photo-frame {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--card), var(--darker));
+            border: 4px solid transparent;
+            background-clip: padding-box;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3), 0 20px 60px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        .founder-photo-frame::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary), var(--accent));
+            z-index: -1;
+            animation: rotateBorder 4s linear infinite;
+        }
+
+        @keyframes rotateBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .founder-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 1.5rem;
+            padding: 0.5rem 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .founder-info h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.2rem;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(135deg, var(--text), var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .founder-role {
+            color: var(--primary-glow);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .founder-bio {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .founder-quote {
+            background: var(--card);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0 16px 16px 0;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .founder-quote::before {
+            content: '"';
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+        }
+
+        .founder-quote p {
+            color: var(--text);
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-section {
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
+        }
+
+        .contact-icon-bg {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .contact-label {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-value {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .founder-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .value-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-title {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .value-desc {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .cta-banner {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .cta-banner h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-banner p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 768px) {
+            .founder-hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .founder-photo-frame {
+                width: 200px;
+                height: 200px;
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <canvas id="particle-canvas"></canvas>
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">SMID</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="prototype.html">Categories</a>
+            <a href="register.html">Register</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="idcard.html">ID Card</a>
+            <a href="cloud.html">Cloud</a>
+            <a href="founder.html" class="active">Founder</a>
+            <div class="theme-toggle">
+                <button class="theme-btn" onclick="setTheme('dark')">🌙</button>
+                <button class="theme-btn" onclick="setTheme('light')">☀️</button>
+                <button class="theme-btn" onclick="setTheme('neon')">⚡</button>
+            </div>
+        </div>
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="prototype.html">Categories</a>
+        <a href="register.html">Register</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="idcard.html">ID Card</a>
+        <a href="cloud.html">Cloud</a>
+        <a href="founder.html">Founder</a>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Meet the Founder</h2>
+            <p class="section-subtitle">The vision behind SMID</p>
+
+            <div class="founder-hero">
+                <div class="founder-photo-card">
+                    <div class="founder-photo-frame">👤</div>
+                    <div class="founder-badge">
+                        <span>✓</span> Verified Founder
+                    </div>
+                </div>
+
+                <div class="founder-info">
+                    <h2>Oluwatosin Abraham Willoughby</h2>
+                    <div class="founder-role">Founder & CEO, SMID Platform</div>
+
+                    <div class="founder-quote">
+                        <p>"I'm a non-technical founder with a clear vision. I need the right technical partner to bring it to life. SMID isn't just a product — it's a movement to make the internet a place where real people can connect, create, and grow with confidence."</p>
+                    </div>
+
+                    <p class="founder-bio">
+                        Oluwatosin Abraham Willoughby founded SMID with a singular mission: to eliminate the anonymity that enables online fraud, impersonation, and abuse. Drawing from firsthand experience with the damage caused by fake accounts and unverified identities, he envisioned a universal trust layer that works across every social platform, marketplace, and digital community.
+                    </p>
+
+                    <p class="founder-bio">
+                        Under his leadership, SMID is building the world's first age-tiered identity verification system — protecting teenagers, empowering young adults, securing professionals, and validating businesses through a single, unified protocol.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Core Values -->
+            <div class="founder-values">
+                <div class="value-card">
+                    <div class="value-icon">🔒</div>
+                    <div class="value-title">Security First</div>
+                    <div class="value-desc">Every design decision prioritizes user safety and data protection.</div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🌍</div>
+                    <div class="value-title">Global Access</div>
+                    <div class="value-desc">Identity verification should work for everyone, everywhere.</div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">⚖️</div>
+                    <div class="value-title">Fair & Inclusive</div>
+                    <div class="value-desc">Age-appropriate tiers that protect without excluding.</div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🔗</div>
+                    <div class="value-title">Interoperable</div>
+                    <div class="value-desc">One identity that works across all platforms.</div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <h2 class="section-title">Connect With the Founder</h2>
+                <p class="section-subtitle">Interested in partnering, investing, or joining the team?</p>
+
+                <div class="contact-cards">
+                    <a href="mailto:oluwatosin.willoughby@smid.platform" class="contact-card">
+                        <div class="contact-icon-bg">📧</div>
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">oluwatosin.willoughby@smid.platform</div>
+                    </a>
+
+                    <a href="mailto:oluwatosin.willoughby@smid.platform?subject=Partnership%20Inquiry" class="contact-card">
+                        <div class="contact-icon-bg">🤝</div>
+                        <div class="contact-label">Partnerships</div>
+                        <div class="contact-value">oluwatosin.willoughby@smid.platform</div>
+                    </a>
+
+                    <a href="mailto:oluwatosin.willoughby@smid.platform?subject=Investment%20Opportunity" class="contact-card">
+                        <div class="contact-icon-bg">💼</div>
+                        <div class="contact-label">Investors</div>
+                        <div class="contact-value">oluwatosin.willoughby@smid.platform</div>
+                    </a>
+
+                    <a href="mailto:oluwatosin.willoughby@smid.platform?subject=Career%20Opportunity" class="contact-card">
+                        <div class="contact-icon-bg">🚀</div>
+                        <div class="contact-label">Careers</div>
+                        <div class="contact-value">oluwatosin.willoughby@smid.platform</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="cta-banner">
+                <h3>Join the Mission</h3>
+                <p>SMID is looking for technical partners, investors, and early adopters who believe in a safer, more trustworthy internet.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="register.html" class="btn btn-primary"><span>🛡️</span> Get Verified</a>
+                    <a href="mailto:oluwatosin.willoughby@smid.platform" class="btn btn-outline"><span>📧</span> Contact Founder</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p style="font-family: 'Orbitron', monospace; font-size: 1.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SMID</p>
+        <p>Identity Today, Safety Tomorrow.</p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 SMID Platform. Founded by Oluwatosin Abraham Willoughby. All rights reserved.</p>
+    </footer>
+
+    <div class="cloud-status" onclick="showCloudInfo()">
+        <div class="cloud-dot"></div>
+        <span>Cloud Sync: Active</span>
+        <span id="savedCount" style="color: var(--text-muted); font-size: 0.75rem;">(0 saved)</span>
+    </div>
+
+    <script src="shared.js"></script>
+</body>
+</html>
