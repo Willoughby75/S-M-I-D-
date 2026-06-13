@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMID - Cloud & Contact</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .cloud-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .cloud-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        .cloud-card h3 {
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 1.5rem;
+            color: var(--primary-glow);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: var(--darker);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .data-row:hover { background: rgba(99, 102, 241, 0.1); }
+        .data-key { color: var(--text-muted); }
+        .data-val { color: var(--text); font-weight: 600; }
+        .action-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .action-bar .btn {
+            padding: 0.7rem 1.2rem;
+            font-size: 0.9rem;
+        }
+        .json-preview {
+            background: var(--darker);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card);
+            border-radius: 24px;
+            padding: 3rem;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .contact-info-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s;
+        }
+        .contact-info-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        .contact-icon {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+        .storage-meter {
+            width: 100%;
+            height: 12px;
+            background: var(--darker);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .storage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+        .reg-item {
+            background: var(--darker);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        .reg-item:hover { border-color: var(--primary); }
+        .reg-item-info { flex: 1; }
+        .reg-item-name { font-weight: 600; margin-bottom: 0.2rem; }
+        .reg-item-meta { font-size: 0.8rem; color: var(--text-muted); }
+        .reg-item-actions { display: flex; gap: 0.5rem; }
+        .icon-btn {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .icon-btn:hover { background: var(--danger); color: white; }
+        .icon-btn.view:hover { background: var(--primary); }
+        .message-history {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .message-item {
+            background: var(--darker);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--primary);
+        }
+        .message-item.sent {
+            border-left-color: var(--neon-green);
+        }
+        .message-sender { font-weight: 600; font-size: 0.9rem; }
+        .message-text { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem; }
+        .message-time { color: var(--text-muted); font-size: 0.75rem; margin-top: 0.3rem; }
+    </style>
+</head>
+<body data-theme="dark">
+    <canvas id="particle-canvas"></canvas>
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">SMID</a>
+        <div class="nav-links">
+            <a href="index.html" data-i18n="nav_home">Home</a>
+            <a href="prototype.html" data-i18n="nav_categories">Categories</a>
+            <a href="register.html" data-i18n="nav_register">Register</a>
+            <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
+            <a href="idcard.html" data-i18n="nav_idcard">ID Card</a>
+            <a href="cloud.html" class="active" data-i18n="nav_cloud">Cloud</a>
+            <a href="founder.html" data-i18n="nav_founder">Founder</a>
+        </div>
+        <div class="nav-controls">
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="toggleLangDropdown()">
+                    <span>🌐</span>
+                    <span id="currentLang">English</span>
+                    <span>▼</span>
+                </button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <div class="lang-option" data-lang="en" onclick="selectLang('en')">🇺🇸 English</div>
+                    <div class="lang-option" data-lang="fr" onclick="selectLang('fr')">🇫🇷 Français</div>
+                    <div class="lang-option" data-lang="es" onclick="selectLang('es')">🇪🇸 Español</div>
+                    <div class="lang-option" data-lang="pt" onclick
