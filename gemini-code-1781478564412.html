@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMID - SMID In / SMID Out</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark">
+    <canvas id="particle-canvas"></canvas>
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">SMID</a>
+        <div class="nav-links">
+            <a href="index.html" data-i18n="nav_home">Home</a>
+            <a href="prototype.html" data-i18n="nav_categories">Categories</a>
+            <a href="register.html" data-i18n="nav_register">Register</a>
+            <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
+            <a href="idcard.html" data-i18n="nav_idcard">ID Card</a>
+            <a href="cloud.html" data-i18n="nav_cloud">Cloud</a>
+            <a href="founder.html" data-i18n="nav_founder">Founder</a>
+        </div>
+        <div class="nav-controls">
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="toggleLangDropdown()">
+                    <span>🌐</span>
+                    <span id="currentLang">English</span>
+                    <span>▼</span>
+                </button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <div class="lang-option" data-lang="en" onclick="selectLang('en')">🇺🇸 English</div>
+                    <div class="lang-option" data-lang="fr" onclick="selectLang('fr')">🇫🇷 Français</div>
+                    <div class="lang-option" data-lang="es" onclick="selectLang('es')">🇪🇸 Español</div>
+                    <div class="lang-option" data-lang="pt" onclick="selectLang('pt')">🇧🇷 Português</div>
+                    <div class="lang-option" data-lang="yo" onclick="selectLang('yo')">🇳🇬 Yorùbá</div>
+                    <div class="lang-option" data-lang="ar" onclick="selectLang('ar')">🇸🇦 العربية</div>
+                    <div class="lang-option" data-lang="zh" onclick="selectLang('zh')">🇨🇳 中文</div>
+                </div>
+            </div>
+            <div class="theme-toggle">
+                <button class="theme-btn" onclick="setTheme('dark')">🌙</button>
+                <button class="theme-btn" onclick="setTheme('light')">☀️</button>
+                <button class="theme-btn" onclick="setTheme('neon')">⚡</button>
+            </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" data-i18n="nav_home">Home</a>
+        <a href="prototype.html" data-i18n="nav_categories">Categories</a>
+        <a href="register.html" data-i18n="nav_register">Register</a>
+        <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
+        <a href="idcard.html" data-i18n="nav_idcard">ID Card</a>
+        <a href="cloud.html" data-i18n="nav_cloud">Cloud</a>
+        <a href="founder.html" data-i18n="nav_founder">Founder</a>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Account Access</h2>
+            <p class="section-subtitle">Secure your SMID identity</p>
+
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchAuthTab('smidin')" data-i18n="auth_smidin">SMID In</button>
+                    <button class="auth-tab" onclick="switchAuthTab('smidout')" data-i18n="auth_smidout">SMID Out</button>
+                </div>
+
+                <div class="auth-panel active" id="panel-smidin">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label data-i18n="auth_email">Email</label>
+                            <input type="email" id="loginEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="auth_password">Password</label>
+                            <input type="password" id="loginPassword" required placeholder="Enter password">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" data-i18n="auth_smidin">SMID In</button>
+                    </form>
+                    <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                        <a href="#" style="color: var(--primary);" data-i18n="auth_forgot">Forgot Password?</a>
+                    </p>
+                    <p style="text-align: center; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                        <span data-i18n="auth_no_account">No account?</span> <a href="#" onclick="switchAuthTab('smidout')" style="color: var(--primary);" data-i18n="auth_smidout">SMID Out</a>
+                    </p>
+                </div>
+
+                <div class="auth-panel" id="panel-smidout">
+                    <form onsubmit="handleSignup(event)">
+                        <div class="form-group">
+                            <label data-i18n="auth_name">Full Name</label>
+                            <input type="text" id="signupName" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="auth_email">Email</label>
+                            <input type="email" id="signupEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="auth_password">Password</label>
+                            <input type="password" id="signupPassword" required placeholder="Create password" oninput="checkPasswordStrength(this.value)">
+                            <div class="pw-strength" id="pwStrength"></div>
+                            <div class="pw-label" id="pwLabel">Enter password</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" data-i18n="auth_smidout">SMID Out</button>
+                    </form>
+                    <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                        <span data-i18n="auth_has_account">Already have an account?</span> <a href="#" onclick="switchAuthTab('smidin')" style="color: var(--primary);" data-i18n="auth_smidin">SMID In</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p style="font-family: 'Orbitron', monospace; font-size: 1.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SMID</p>
+        <p>Identity Today, Safety Tomorrow.</p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 SMID Platform. Founded by Oluwatosin Abraham Willoughby. All rights reserved.</p>
+    </footer>
+
+    <script src="shared.js"></script>
+    <script>
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+            
+            // Fixed reference to target element safely regardless of user action event triggers
+            const targetTab = event ? event.target : document.querySelector(`[onclick="switchAuthTab('${tab}')"]`);
+            if (targetTab) targetTab.classList.add('active');
+            
+            document.getElementById('panel-' + tab).classList.add('active');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            if (SMIDAuth.login(email, password)) {
+                setTimeout(() => window.location.href = 'index.html', 1000);
+            }
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            if (SMIDAuth.signup(name, email, password)) {
+                setTimeout(() => window.location.href = 'index.html', 1000);
+            }
+        }
+    </script>
+</body>
+</html>
