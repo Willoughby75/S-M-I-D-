@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMID - Login / Sign Up</title>
+    <title>SMID - Smidin / Smid Up</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body data-theme="dark">
@@ -75,43 +75,43 @@
                     <form onsubmit="handleLogin(event)">
                         <div class="form-group">
                             <label data-i18n="auth_email">Email</label>
-                            <input type="email" id="loginEmail" required placeholder="your@email.com">
+                            <input type="email" id="smidinEmail" required placeholder="your@email.com">
                         </div>
                         <div class="form-group">
                             <label data-i18n="auth_password">Password</label>
-                            <input type="password" id="loginPassword" required placeholder="Enter password">
+                            <input type="password" id="smidinPassword" required placeholder="Enter password">
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" data-i18n="auth_login">Login</button>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" data-i18n="auth_smidin">Smidin</button>
                     </form>
                     <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
                         <a href="#" style="color: var(--primary);" data-i18n="auth_forgot">Forgot Password?</a>
                     </p>
                     <p style="text-align: center; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                        <span data-i18n="auth_no_account">No account?</span> <a href="#" onclick="switchAuthTab('signup')" style="color: var(--primary);" data-i18n="auth_signup">Sign Up</a>
+                        <span data-i18n="auth_no_account">No account?</span> <a href="#" onclick="switchAuthTab('smidup')" style="color: var(--primary);" data-i18n="auth_smidup">Smid Up</a>
                     </p>
                 </div>
 
                 <!-- Signup Panel -->
-                <div class="auth-panel" id="panel-signup">
-                    <form onsubmit="handleSignup(event)">
+                <div class="auth-panel" id="panel-smidup">
+                    <form onsubmit="handleSmidup(event)">
                         <div class="form-group">
                             <label data-i18n="auth_name">Full Name</label>
-                            <input type="text" id="signupName" required placeholder="John Doe">
+                            <input type="text" id="smidupName" required placeholder="John ">
                         </div>
                         <div class="form-group">
                             <label data-i18n="auth_email">Email</label>
-                            <input type="email" id="signupEmail" required placeholder="your@email.com">
+                            <input type="email" id="smidupEmail" required placeholder="your@email.com">
                         </div>
                         <div class="form-group">
                             <label data-i18n="auth_password">Password</label>
-                            <input type="password" id="signupPassword" required placeholder="Create password" oninput="checkPasswordStrength(this.value)">
+                            <input type="password" id="smidupPassword" required placeholder="Create password" oninput="checkPasswordStrength(this.value)">
                             <div class="pw-strength" id="pwStrength"></div>
                             <div class="pw-label" id="pwLabel">Enter password</div>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" data-i18n="auth_signup">Sign Up</button>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" data-i18n="auth_smidup">Smid Up</button>
                     </form>
                     <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
-                        <span data-i18n="auth_has_account">Already have an account?</span> <a href="#" onclick="switchAuthTab('login')" style="color: var(--primary);" data-i18n="auth_login">Login</a>
+                        <span data-i18n="auth_has_account">Already have an account?</span> <a href="#" onclick="switchAuthTab('smidin')" style="color: var(--primary);" data-i18n="auth_smidin">Smidin</a>
                     </p>
                 </div>
             </div>
@@ -121,7 +121,7 @@
     <footer class="footer">
         <p style="font-family: 'Orbitron', monospace; font-size: 1.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SMID</p>
         <p>Identity Today, Safety Tomorrow.</p>
-        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 SMID Platform. Founded by Oluwatosin Abraham Willoughby. All rights reserved.</p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 SMID Platform. Founded by Oluwatosin Abraham Willoughby. All rights reserved Together we will change the narrative of social media.</p>
     </footer>
 
     <script src="shared.js"></script>
@@ -135,19 +135,19 @@
 
         function handleLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            if (SMIDAuth.login(email, password)) {
+            const email = document.getElementById('smidinEmail').value;
+            const password = document.getElementById('smidinPassword').value;
+            if (SMIDAuth.smidin(email, password)) {
                 setTimeout(() => window.location.href = 'index.html', 1000);
             }
         }
 
         function handleSignup(e) {
             e.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            if (SMIDAuth.signup(name, email, password)) {
+            const name = document.getElementById('smidupName').value;
+            const email = document.getElementById('smidupEmail').value;
+            const password = document.getElementById('smidupPassword').value;
+            if (SMIDAuth.smidup(name, email, password)) {
                 setTimeout(() => window.location.href = 'index.html', 1000);
             }
         }
