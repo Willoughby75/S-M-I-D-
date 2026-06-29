@@ -13,7 +13,9 @@ app = FastAPI(title="SMID Secure Authentication API")
 origins = [
     "https://willoughby75.github.io",
     "http://127.0.0.1:5500",  # Local testing
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "*"
 ]
 
 app.add_middleware(
@@ -42,7 +44,26 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-# 5. API ENDPOINTS
+# 5. HELPER FUNCTIONS
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(hours=1))
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, JWT_SECRET, algorithm=ALGORITHM)
+
+def verify_token(token: str):
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+        if email is None:
+            return None
+        return email
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+# 6. API ENDPOINTS
 @app.post("/register", status_code=status.HTTP_201_CREATED)
 async def register(user: UserRegister):
     if user.email in USER_DB:
@@ -57,7 +78,8 @@ async def register(user: UserRegister):
         "email": user.email,
         "password": hashed_password,
         "verified": False,
-        "trustScore": 50
+        "trustScore": 50,
+        "created_at": datetime.utcnow().isoformat()
     }
     return {"message": "User registered successfully"}
 
@@ -82,3 +104,26 @@ async def login(user: UserLogin):
             "trustScore": db_user["trustScore"]
         }
     }
+
+@app.get("/verify")
+async def verify_token_endpoint(token: str):
+    email = verify_token(token)
+    if not email:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    user = USER_DB.get(email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {
+        "valid": True,
+        "user": {
+            "id": user["id"],
+            "name": user["name"],
+            "email": user["email"],
+            "verified": user["verified"],
+            "trustScore": user["trustScore"]
+        }
+    }
+
+@app.get("/")
+async def root():
+    return {"message": "SMID API is running", "status": "online"}
