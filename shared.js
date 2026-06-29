@@ -103,3 +103,61 @@ const SMIDAuth = {
         return !!this.getToken();
     }
 };
+
+// ---------- SECURE PAGE INIT & ROUTE GUARD ----------
+function enforceSecurityGuard() {
+    const protectedPages = ['dashboard.html', 'idcard.html'];
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+    // If user is trying to access a protected page but has no token, kick them out
+    if (protectedPages.includes(currentPage) && !SMIDAuth.isLoggedIn()) {
+        window.location.replace('login.html');
+        return false; // Stop execution
+    }
+
+    // If a logged-in user tries to go to the login/register page, send them to dashboard
+    const authPages = ['login.html', 'register.html'];
+    if (authPages.includes(currentPage) && SMIDAuth.isLoggedIn()) {
+        window.location.replace('dashboard.html');
+        return false;
+    }
+    return true;
+}
+
+function initPage() {
+    // 1. Run the security check FIRST
+    if (!enforceSecurityGuard()) return; 
+
+    // 2. Proceed with normal page setup
+    SMIDi18n.load();
+    SMIDi18n.apply();
+    loadTheme();
+    updateAuthNav();
+    SMIDCloud.updateBadge();
+    initSearch();
+
+    // Set active nav link
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+
+    // Set current language display
+    const currentLang = document.getElementById('currentLang');
+    if (currentLang) {
+        const names = { en: 'English', fr: 'Français', es: 'Español', pt: 'Português', yo: 'Yorùbá', ar: 'العربية', zh: '中文' };
+        currentLang.textContent = names[SMIDi18n.current] || 'English';
+    }
+
+    // Mark active lang option
+    document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.getAttribute('data-lang') === SMIDi18n.current);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initPage);
