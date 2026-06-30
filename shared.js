@@ -8,8 +8,8 @@ const translations = {
     en: {
         nav_home: 'Home', nav_categories: 'Categories', nav_register: 'Register',
         nav_dashboard: 'Dashboard', nav_idcard: 'ID Card', nav_cloud: 'Cloud',
-        nav_languages: 'Languages',
-        nav_founder: 'Founder', nav_login: 'Login', nav_logout: 'Logout',
+        nav_languages: 'Languages', nav_founder: 'Founder',
+        nav_login: 'Login', nav_logout: 'Logout',
         cloud_sync: 'Cloud Sync: Active', cloud_sync_off: 'Cloud Sync: Offline',
         saved_items: 'Saved Items', no_saved: 'No saved items yet', clear_all: 'Clear All',
         offline: 'You are offline', online: 'You are back online',
@@ -27,9 +27,10 @@ const translations = {
         logout_success: 'Logged out successfully', session_expired: 'Session expired. Please log in again.'
     },
     fr: {
-        nav_home: 'Accueil', nav_categories: 'Catégories', nav_register: 'S'inscrire',
-        nav_dashboard: 'Tableau de bord', nav_idcard: 'Carte d'identité', nav_cloud: 'Cloud',
-        nav_founder: 'Fondateur', nav_login: 'Connexion', nav_logout: 'Déconnexion',
+        nav_home: 'Accueil', nav_categories: 'Catégories', nav_register: "S'inscrire",
+        nav_dashboard: 'Tableau de bord', nav_idcard: "Carte d'identité", nav_cloud: 'Cloud',
+        nav_languages: 'Langues', nav_founder: 'Fondateur',
+        nav_login: 'Connexion', nav_logout: 'Déconnexion',
         cloud_sync: 'Sync Cloud: Active', cloud_sync_off: 'Sync Cloud: Hors ligne',
         saved_items: 'Éléments sauvegardés', no_saved: 'Aucun élément sauvegardé', clear_all: 'Tout effacer',
         offline: 'Vous êtes hors ligne', online: 'Vous êtes de retour en ligne',
@@ -39,7 +40,7 @@ const translations = {
         search: 'Rechercher', filter: 'Filtrer', settings: 'Paramètres', profile: 'Profil',
         notifications: 'Notifications', security: 'Sécurité', privacy: 'Confidentialité',
         help: 'Aide', about: 'À propos', contact: 'Contact',
-        terms: 'Conditions d'utilisation', privacy_policy: 'Politique de confidentialité',
+        terms: "Conditions d'utilisation", privacy_policy: 'Politique de confidentialité',
         language: 'Langue', theme: 'Thème', dark: 'Sombre', light: 'Clair', neon: 'Néon',
         required_field: 'Ce champ est requis', invalid_email: 'Adresse email invalide',
         invalid_phone: 'Numéro de téléphone invalide', password_mismatch: 'Les mots de passe ne correspondent pas',
@@ -49,8 +50,8 @@ const translations = {
     es: {
         nav_home: 'Inicio', nav_categories: 'Categorías', nav_register: 'Registrarse',
         nav_dashboard: 'Panel', nav_idcard: 'Tarjeta de ID', nav_cloud: 'Nube',
-        nav_languages: 'Idiomas',
-        nav_founder: 'Fundador', nav_login: 'Iniciar sesión', nav_logout: 'Cerrar sesión',
+        nav_languages: 'Idiomas', nav_founder: 'Fundador',
+        nav_login: 'Iniciar sesión', nav_logout: 'Cerrar sesión',
         cloud_sync: 'Sincronización: Activa', cloud_sync_off: 'Sincronización: Desconectada',
         saved_items: 'Elementos guardados', no_saved: 'No hay elementos guardados', clear_all: 'Borrar todo',
         offline: 'Estás desconectado', online: 'Has vuelto a estar en línea',
@@ -70,8 +71,8 @@ const translations = {
     pt: {
         nav_home: 'Início', nav_categories: 'Categorias', nav_register: 'Registrar',
         nav_dashboard: 'Painel', nav_idcard: 'Cartão de ID', nav_cloud: 'Nuvem',
-        nav_languages: 'Idiomas',
-        nav_founder: 'Fundador', nav_login: 'Entrar', nav_logout: 'Sair',
+        nav_languages: 'Idiomas', nav_founder: 'Fundador',
+        nav_login: 'Entrar', nav_logout: 'Sair',
         cloud_sync: 'Sincronização: Ativa', cloud_sync_off: 'Sincronização: Offline',
         saved_items: 'Itens salvos', no_saved: 'Nenhum item salvo', clear_all: 'Limpar tudo',
         offline: 'Você está offline', online: 'Você está online novamente',
@@ -91,8 +92,8 @@ const translations = {
     yo: {
         nav_home: 'Ile', nav_categories: 'Àwọn Ẹka', nav_register: 'Forukọsilẹ',
         nav_dashboard: 'Dasibodu', nav_idcard: 'Kaadi ID', nav_cloud: 'Kuraadu',
-        nav_languages: 'Awọn Ede',
-        nav_founder: 'Oludasile', nav_login: 'Wọle', nav_logout: 'Jade',
+        nav_languages: 'Awọn Ede', nav_founder: 'Oludasile',
+        nav_login: 'Wọle', nav_logout: 'Jade',
         cloud_sync: 'Aṣiṣe Kuraadu: Nṣiṣẹ', cloud_sync_off: 'Aṣiṣe Kuraadu: Laiṣiṣẹ',
         saved_items: 'Awọn Ohun Ti A Fipamọ', no_saved: 'Ko si ohun ti a fipamọ', clear_all: 'Pa Gbogbo Rẹ',
         offline: 'O wa laiṣiṣẹ', online: 'O ti pada siṣẹ',
@@ -112,8 +113,8 @@ const translations = {
     ar: {
         nav_home: 'الرئيسية', nav_categories: 'الفئات', nav_register: 'تسجيل',
         nav_dashboard: 'لوحة التحكم', nav_idcard: 'بطاقة الهوية', nav_cloud: 'السحابة',
-        nav_languages: 'اللغات',
-        nav_founder: 'المؤسس', nav_login: 'تسجيل الدخول', nav_logout: 'تسجيل الخروج',
+        nav_languages: 'اللغات', nav_founder: 'المؤسس',
+        nav_login: 'تسجيل الدخول', nav_logout: 'تسجيل الخروج',
         cloud_sync: 'المزامنة: نشطة', cloud_sync_off: 'المزامنة: غير متصلة',
         saved_items: 'العناصر المحفوظة', no_saved: 'لا توجد عناصر محفوظة', clear_all: 'مسح الكل',
         offline: 'أنت غير متصل', online: 'أنت متصل مرة أخرى',
@@ -133,8 +134,8 @@ const translations = {
     zh: {
         nav_home: '首页', nav_categories: '分类', nav_register: '注册',
         nav_dashboard: '仪表板', nav_idcard: '身份证', nav_cloud: '云',
-        nav_languages: '语言',
-        nav_founder: '创始人', nav_login: '登录', nav_logout: '登出',
+        nav_languages: '语言', nav_founder: '创始人',
+        nav_login: '登录', nav_logout: '登出',
         cloud_sync: '云同步: 活跃', cloud_sync_off: '云同步: 离线',
         saved_items: '已保存项目', no_saved: '尚无保存项目', clear_all: '全部清除',
         offline: '您已离线', online: '您已重新在线',
@@ -165,19 +166,23 @@ function selectLang(lang) {
     currentLang = lang;
     localStorage.setItem('smid_lang', lang);
     applyLanguage(lang);
+
     const dropdown = document.getElementById('langDropdown');
     if (dropdown) dropdown.classList.remove('show');
+
     const currentLangEl = document.getElementById('currentLang');
     if (currentLangEl) {
         const labels = { en: 'English', fr: 'Français', es: 'Español', pt: 'Português', yo: 'Yorùbá', ar: 'العربية', zh: '中文' };
         currentLangEl.textContent = labels[lang] || 'English';
     }
+
     // Update RTL
     if (lang === 'ar') {
         document.documentElement.setAttribute('dir', 'rtl');
     } else {
         document.documentElement.setAttribute('dir', 'ltr');
     }
+
     showNotification('Language Changed', `Switched to ${labels[lang] || lang}`, 'success');
 }
 
@@ -191,42 +196,50 @@ function applyLanguage(lang) {
 
 function loadLanguage() {
     const saved = localStorage.getItem('smid_lang');
-    if (saved) {
+    if (saved && translations[saved]) {
         currentLang = saved;
         applyLanguage(saved);
         if (saved === 'ar') document.documentElement.setAttribute('dir', 'rtl');
+
         const currentLangEl = document.getElementById('currentLang');
         if (currentLangEl) {
             const labels = { en: 'English', fr: 'Français', es: 'Español', pt: 'Português', yo: 'Yorùbá', ar: 'العربية', zh: '中文' };
             currentLangEl.textContent = labels[saved] || 'English';
         }
+
+        // Highlight active language option
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.classList.toggle('active', opt.getAttribute('data-lang') === saved);
+        });
     }
 }
 
 // ========== THEME FUNCTIONS ==========
 function setTheme(theme) {
     document.body.setAttribute('data-theme', theme);
-    document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-    if (event && event.target) event.target.classList.add('active');
     localStorage.setItem('smid_theme', theme);
+
+    // Update active button state
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+        const btnTheme = btn.getAttribute('onclick');
+        if (btnTheme && btnTheme.includes("'" + theme + "'")) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 function loadTheme() {
-    const saved = localStorage.getItem('smid_theme');
-    if (saved) {
-        document.body.setAttribute('data-theme', saved);
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            if ((saved === 'dark' && btn.textContent.includes('🌙')) ||
-                (saved === 'light' && btn.textContent.includes('☀️')) ||
-                (saved === 'neon' && btn.textContent.includes('⚡'))) {
-                btn.classList.add('active');
-            }
-        });
-    } else {
-        document.body.setAttribute('data-theme', 'dark');
-        const firstBtn = document.querySelector('.theme-btn');
-        if (firstBtn) firstBtn.classList.add('active');
-    }
+    const saved = localStorage.getItem('smid_theme') || 'dark';
+    document.body.setAttribute('data-theme', saved);
+
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+        const btnTheme = btn.getAttribute('onclick');
+        if (btnTheme && btnTheme.includes("'" + saved + "'")) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 // ========== MOBILE MENU ==========
@@ -238,19 +251,19 @@ function toggleMobileMenu() {
 }
 
 // ========== NOTIFICATIONS ==========
-function showNotification(title, text, type = 'info') {
+function showNotification(title, text, type) {
     const container = document.getElementById('notificationContainer');
     if (!container) return;
     const notif = document.createElement('div');
-    notif.className = `notification ${type}`;
+    notif.className = 'notification ' + type;
     const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ', ai: '🤖' };
-    notif.innerHTML = `<div class="notification-title">${icons[type] || 'ℹ'} ${title}</div><div class="notification-text">${text}</div>`;
+    notif.innerHTML = '<div class="notification-title">' + (icons[type] || 'ℹ') + ' ' + title + '</div><div class="notification-text">' + text + '</div>';
     container.appendChild(notif);
-    requestAnimationFrame(() => notif.classList.add('show'));
-    setTimeout(() => {
+    requestAnimationFrame(function() { notif.classList.add('show'); });
+    setTimeout(function() {
         notif.style.transform = 'translateX(400px)';
         notif.style.opacity = '0';
-        setTimeout(() => notif.remove(), 400);
+        setTimeout(function() { notif.remove(); }, 400);
     }, 4000);
 }
 
@@ -260,41 +273,53 @@ function initParticles() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let particles = [];
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    let animId = null;
+
+    function resize() { 
+        canvas.width = window.innerWidth; 
+        canvas.height = window.innerHeight; 
+    }
     resize();
     window.addEventListener('resize', resize);
-    class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
-            this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
-            this.size = Math.random() * 2 + 1;
-        }
-        update() {
-            this.x += this.vx; this.y += this.vy;
-            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-        }
-        draw() {
-            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--primary').trim() || '#6366f1';
-            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-        }
+
+    function Particle() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2 + 1;
     }
+    Particle.prototype.update = function() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+    };
+    Particle.prototype.draw = function() {
+        const primary = getComputedStyle(document.body).getPropertyValue('--primary').trim() || '#6366f1';
+        ctx.fillStyle = primary;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    };
+
     function init() {
         particles = [];
         const count = Math.min(80, (canvas.width * canvas.height) / 15000);
         for (let i = 0; i < count; i++) particles.push(new Particle());
     }
     init();
+
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => { p.update(); p.draw(); });
+        particles.forEach(function(p) { p.update(); p.draw(); });
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < 150) {
-                    ctx.strokeStyle = `rgba(99, 102, 241, ${0.15 * (1 - dist / 150)})`;
+                    ctx.strokeStyle = 'rgba(99, 102, 241, ' + (0.15 * (1 - dist / 150)) + ')';
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
@@ -303,7 +328,7 @@ function initParticles() {
                 }
             }
         }
-        requestAnimationFrame(animate);
+        animId = requestAnimationFrame(animate);
     }
     animate();
 }
@@ -311,13 +336,13 @@ function initParticles() {
 // ========== CLOUD STATUS ==========
 function showCloudInfo() {
     const saved = JSON.parse(localStorage.getItem('smid_saved') || '[]');
-    showNotification('Cloud Storage', `${saved.length} items saved locally. Sync when online.`, 'info');
+    showNotification('Cloud Storage', saved.length + ' items saved locally. Sync when online.', 'info');
 }
 
 function updateSavedCount() {
     const saved = JSON.parse(localStorage.getItem('smid_saved') || '[]');
     const el = document.getElementById('savedCount');
-    if (el) el.textContent = `(${saved.length} saved)`;
+    if (el) el.textContent = '(' + saved.length + ' saved)';
 }
 
 // ========== AUTH STATE ==========
@@ -326,9 +351,9 @@ function checkAuth() {
     const authNav = document.getElementById('authNav');
     if (authNav) {
         if (user) {
-            authNav.innerHTML = `<a href="#" onclick="logout()" style="color:var(--text-muted);text-decoration:none;font-weight:500;font-size:0.9rem;">${translations[currentLang]?.nav_logout || 'Logout'}</a>`;
+            authNav.innerHTML = '<a href="#" onclick="logout()" style="color:var(--text-muted);text-decoration:none;font-weight:500;font-size:0.9rem;">' + (translations[currentLang]?.nav_logout || 'Logout') + '</a>';
         } else {
-            authNav.innerHTML = `<a href="login.html" style="color:var(--text-muted);text-decoration:none;font-weight:500;font-size:0.9rem;">${translations[currentLang]?.nav_login || 'Login'}</a>`;
+            authNav.innerHTML = '<a href="login.html" style="color:var(--text-muted);text-decoration:none;font-weight:500;font-size:0.9rem;">' + (translations[currentLang]?.nav_login || 'Login') + '</a>';
         }
     }
 }
@@ -336,7 +361,7 @@ function checkAuth() {
 function logout() {
     localStorage.removeItem('smid_user');
     showNotification('Logged Out', 'You have been logged out successfully.', 'success');
-    setTimeout(() => window.location.href = 'index.html', 1000);
+    setTimeout(function() { window.location.href = 'index.html'; }, 1000);
 }
 
 // ========== PASSWORD STRENGTH ==========
@@ -359,17 +384,8 @@ function validatePhone(phone) {
     return /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$/.test(phone);
 }
 
-// ========== LOCAL STORAGE HELPERS ==========
-function saveToLocal(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
-}
-
-function loadFromLocal(key) {
-    try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }
-}
-
 // ========== INIT ==========
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     loadTheme();
     loadLanguage();
     initParticles();
@@ -377,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateSavedCount();
 
     // Close dropdowns on outside click
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', function(e) {
         const dropdown = document.getElementById('langDropdown');
         const switcher = document.querySelector('.lang-switcher');
         if (dropdown && switcher && !switcher.contains(e.target)) {
@@ -386,12 +402,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Online/offline detection
-    window.addEventListener('online', () => {
+    window.addEventListener('online', function() {
         showNotification('Online', translations[currentLang]?.online || 'You are back online', 'success');
         const cloudStatus = document.querySelector('.cloud-status span');
         if (cloudStatus) cloudStatus.textContent = translations[currentLang]?.cloud_sync || 'Cloud Sync: Active';
     });
-    window.addEventListener('offline', () => {
+    window.addEventListener('offline', function() {
         showNotification('Offline', translations[currentLang]?.offline || 'You are offline', 'warning');
         const cloudStatus = document.querySelector('.cloud-status span');
         if (cloudStatus) cloudStatus.textContent = translations[currentLang]?.cloud_sync_off || 'Cloud Sync: Offline';
