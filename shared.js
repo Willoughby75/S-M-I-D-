@@ -8,6 +8,7 @@ const translations = {
     en: {
         nav_home: 'Home', nav_categories: 'Categories', nav_register: 'Register',
         nav_dashboard: 'Dashboard', nav_idcard: 'ID Card', nav_cloud: 'Cloud',
+        nav_languages: 'Languages',
         nav_founder: 'Founder', nav_login: 'Login', nav_logout: 'Logout',
         cloud_sync: 'Cloud Sync: Active', cloud_sync_off: 'Cloud Sync: Offline',
         saved_items: 'Saved Items', no_saved: 'No saved items yet', clear_all: 'Clear All',
@@ -48,6 +49,7 @@ const translations = {
     es: {
         nav_home: 'Inicio', nav_categories: 'Categorías', nav_register: 'Registrarse',
         nav_dashboard: 'Panel', nav_idcard: 'Tarjeta de ID', nav_cloud: 'Nube',
+        nav_languages: 'Idiomas',
         nav_founder: 'Fundador', nav_login: 'Iniciar sesión', nav_logout: 'Cerrar sesión',
         cloud_sync: 'Sincronización: Activa', cloud_sync_off: 'Sincronización: Desconectada',
         saved_items: 'Elementos guardados', no_saved: 'No hay elementos guardados', clear_all: 'Borrar todo',
@@ -68,6 +70,7 @@ const translations = {
     pt: {
         nav_home: 'Início', nav_categories: 'Categorias', nav_register: 'Registrar',
         nav_dashboard: 'Painel', nav_idcard: 'Cartão de ID', nav_cloud: 'Nuvem',
+        nav_languages: 'Idiomas',
         nav_founder: 'Fundador', nav_login: 'Entrar', nav_logout: 'Sair',
         cloud_sync: 'Sincronização: Ativa', cloud_sync_off: 'Sincronização: Offline',
         saved_items: 'Itens salvos', no_saved: 'Nenhum item salvo', clear_all: 'Limpar tudo',
@@ -88,6 +91,7 @@ const translations = {
     yo: {
         nav_home: 'Ile', nav_categories: 'Àwọn Ẹka', nav_register: 'Forukọsilẹ',
         nav_dashboard: 'Dasibodu', nav_idcard: 'Kaadi ID', nav_cloud: 'Kuraadu',
+        nav_languages: 'Awọn Ede',
         nav_founder: 'Oludasile', nav_login: 'Wọle', nav_logout: 'Jade',
         cloud_sync: 'Aṣiṣe Kuraadu: Nṣiṣẹ', cloud_sync_off: 'Aṣiṣe Kuraadu: Laiṣiṣẹ',
         saved_items: 'Awọn Ohun Ti A Fipamọ', no_saved: 'Ko si ohun ti a fipamọ', clear_all: 'Pa Gbogbo Rẹ',
@@ -108,6 +112,7 @@ const translations = {
     ar: {
         nav_home: 'الرئيسية', nav_categories: 'الفئات', nav_register: 'تسجيل',
         nav_dashboard: 'لوحة التحكم', nav_idcard: 'بطاقة الهوية', nav_cloud: 'السحابة',
+        nav_languages: 'اللغات',
         nav_founder: 'المؤسس', nav_login: 'تسجيل الدخول', nav_logout: 'تسجيل الخروج',
         cloud_sync: 'المزامنة: نشطة', cloud_sync_off: 'المزامنة: غير متصلة',
         saved_items: 'العناصر المحفوظة', no_saved: 'لا توجد عناصر محفوظة', clear_all: 'مسح الكل',
@@ -128,6 +133,7 @@ const translations = {
     zh: {
         nav_home: '首页', nav_categories: '分类', nav_register: '注册',
         nav_dashboard: '仪表板', nav_idcard: '身份证', nav_cloud: '云',
+        nav_languages: '语言',
         nav_founder: '创始人', nav_login: '登录', nav_logout: '登出',
         cloud_sync: '云同步: 活跃', cloud_sync_off: '云同步: 离线',
         saved_items: '已保存项目', no_saved: '尚无保存项目', clear_all: '全部清除',
