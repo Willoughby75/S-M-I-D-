@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMID — Languages & Accessibility</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .lang-hero { text-align: center; padding: 2rem 0; max-width: 700px; margin: 0 auto; }
+        .lang-hero h2 { font-family: 'Orbitron', monospace; font-size: 2rem; margin-bottom: 0.5rem; }
+        .lang-hero p { color: var(--text-muted); line-height: 1.7; }
+        .lang-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 2rem auto; }
+        .lang-card { background: var(--card); border-radius: 20px; padding: 1.5rem; border: 2px solid transparent; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+        .lang-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .lang-card.active { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0, 255, 136, 0.15); }
+        .lang-card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .lang-flag { font-size: 2.5rem; }
+        .lang-name { font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700; }
+        .lang-native { color: var(--text-muted); font-size: 0.85rem; }
+        .lang-sample { background: var(--darker); border-radius: 12px; padding: 1rem; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; }
+        .lang-sample-label { font-size: 0.7rem; color: var(--primary-glow); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .lang-stats { display: flex; gap: 1rem; margin-top: 1rem; }
+        .lang-stat { background: var(--darker); border-radius: 8px; padding: 0.4rem 0.8rem; font-size: 0.75rem; color: var(--text-muted); }
+        .lang-stat.complete { color: var(--neon-green); border: 1px solid rgba(0, 255, 136, 0.2); }
+        .lang-stat.partial { color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .accessibility-section { max-width: 1000px; margin: 3rem auto; }
+        .access-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .access-card { background: var(--card); border-radius: 20px; padding: 1.5rem; border: 1px solid rgba(99, 102, 241, 0.1); transition: all 0.3s; }
+        .access-card:hover { border-color: var(--primary); }
+        .access-card .icon { font-size: 2rem; margin-bottom: 0.8rem; }
+        .access-card h3 { font-family: 'Orbitron', monospace; font-size: 1rem; margin-bottom: 0.5rem; }
+        .access-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+        .access-toggle { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(99,102,241,0.1); }
+        .toggle-switch { width: 48px; height: 26px; background: var(--darker); border-radius: 13px; position: relative; cursor: pointer; transition: all 0.3s; border: 2px solid rgba(99,102,241,0.2); }
+        .toggle-switch.on { background: var(--neon-green); border-color: var(--neon-green); }
+        .toggle-switch::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: all 0.3s; }
+        .toggle-switch.on::after { left: 24px; }
+        .demo-box { background: var(--card); border-radius: 20px; padding: 2rem; max-width: 600px; margin: 2rem auto; border: 1px solid rgba(99, 102, 241, 0.2); text-align: center; }
+        .demo-box h3 { font-family: 'Orbitron', monospace; margin-bottom: 1rem; }
+        .demo-text { font-size: 1.1rem; margin: 1rem 0; padding: 1rem; background: var(--darker); border-radius: 12px; }
+        .rtl-demo { direction: rtl; }
+        .lang-progress { max-width: 600px; margin: 2rem auto; }
+        .progress-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .progress-label { width: 100px; font-size: 0.85rem; }
+        .progress-bar { flex: 1; height: 8px; background: var(--darker); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+        .progress-value { width: 40px; text-align: right; font-size: 0.8rem; color: var(--text-muted); }
+    </style>
+</head>
+<body data-theme="dark">
+    <canvas id="particle-canvas"></canvas>
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">SMID</a>
+        <div class="nav-links">
+            <a href="index.html" data-i18n="nav_home">Home</a>
+            <a href="prototype.html" data-i18n="nav_categories">Categories</a>
+            <a href="register.html" data-i18n="nav_register">Register</a>
+            <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
+            <a href="idcard.html" data-i18n="nav_idcard">ID Card</a>
+            <a href="cloud.html" data-i18n="nav_cloud">Cloud</a>
+            <a href="languages.html" class="active" data-i18n="nav_languages">Languages</a>
+            <a href="founder.html" data-i18n="nav_founder">Founder</a>
+        </div>
+        <div class="nav-controls">
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="toggleLangDropdown()">
+                    <span>🌐</span><span id="currentLang">English</span><span>▼</span>
+                </button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <div class="lang-option" data-lang="en" onclick="selectLang('en')">🇺🇸 English</div>
+                    <div class="lang-option" data-lang="fr" onclick="selectLang('fr')">🇫🇷 Français</div>
+                    <div class="lang-option" data-lang="es" onclick="selectLang('es')">🇪🇸 Español</div>
+                    <div class="lang-option" data-lang="pt" onclick="selectLang('pt')">🇧🇷 Português</div>
+                    <div class="lang-option" data-lang="yo" onclick="selectLang('yo')">🇳🇬 Yorùbá</div>
+                    <div class="lang-option" data-lang="ar" onclick="selectLang('ar')">🇸🇦 العربية</div>
+                    <div class="lang-option" data-lang="zh" onclick="selectLang('zh')">🇨🇳 中文</div>
+                </div>
+            </div>
+            <div class="theme-toggle">
+                <button class="theme-btn" onclick="setTheme('dark')">🌙</button>
+                <button class="theme-btn" onclick="setTheme('light')">☀️</button>
+                <button class="theme-btn" onclick="setTheme('neon')">⚡</button>
+            </div>
+            <div id="authNav"></div>
+            <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" data-i18n="nav_home">Home</a>
+        <a href="prototype.html" data-i18n="nav_categories">Categories</a>
+        <a href="register.html" data-i18n="nav_register">Register</a>
+        <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
+        <a href="idcard.html" data-i18n="nav_idcard">ID Card</a>
+        <a href="cloud.html" data-i18n="nav_cloud">Cloud</a>
+        <a href="languages.html" data-i18n="nav_languages">Languages</a>
+        <a href="founder.html" data-i18n="nav_founder">Founder</a>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="lang-hero">
+                <h2>🌍 Global by Design</h2>
+                <p>SMID speaks your language. Our platform supports 7 languages with full RTL support, accessibility features, and culturally-aware design. Switch anytime, anywhere.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Live Language Demo</h3>
+                <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">Click any language card below to see the interface transform instantly.</p>
+                <div class="demo-text" id="demoText">
+                    <strong>Welcome to SMID</strong><br>
+                    Your secure digital identity across all social platforms.
+                </div>
+                <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;" id="demoMeta">English • LTR • Latin script</div>
+            </div>
+
+            <h2 class="section-title">Supported Languages</h2>
+            <div class="lang-grid">
+                <div class="lang-card" data-lang="en" onclick="previewLang('en')">
+                    <div class="lang-card-header">
+                        <div class="lang-flag">🇺🇸</div>
+                        <div>
+                            <div class="lang-name">English</div>
+                            <div class="lang-native">English</div>
+                        </div>
+                    </div>
+                    <div class="lang-sample">
+                        <div class="lang-sample-label">Sample</div>
+                        "Identity Today, Safety Tomorrow. Your secure digital identity across all social platforms."
+                    </div>
+                    <div class="lang-stats">
+                        <div class="lang-stat complete">✓ Full Support</div>
+                        <div class="lang-stat">1.5B+ Speakers</div>
+                    </div>
+                </div>
+
+                <div class="lang-card" data-lang="fr" onclick="previewLang('fr')">
+                    <div class="lang-card-header">
+                        <div class="lang-flag">🇫🇷</div>
+                        <div>
+                            <div class="lang-name">French</div>
+                            <div class="lang-native">Français</div>
+                        </div>
+                    </div>
+                    <div class="lang-sample">
+                        <div class="lang-sample-label">Sample</div>
+                        "Identité aujourd'hui, sécurité demain. Votre identité numérique sécurisée sur toutes les plateformes sociales."
+                    </div>
+                    <div class="lang-stats">
+                        <div class="lang-stat complete">✓ Full Support</div>
+                        <div class="lang-stat">300M+ Speakers</div>
+                    </div>
+                </div>
+
+                <div class="lang-card" data-lang="es" onclick="previewLang('es')">
+                    <div class="lang-card-header">
+                        <div class="lang-flag">🇪🇸</div>
+                        <div>
+                            <div class="lang-name">Spanish</div>
+                            <div class="lang-native">Español</div>
+                        </div>
+                    </div>
+                    <div class="lang-sample">
+                        <div class="lang-sample-label">Sample</div>
+                        "Identidad hoy, seguridad mañana. Tu identidad digital segura en todas las plataformas sociales."
+                    </div>
+                    <div class="lang-stats">
+                        <div class="lang-stat complete">✓ Full Support</div>
+                        <div class="lang-stat">500M+ Speakers</div>
+                    </div>
+                </div>
+
+                <div class="lang-card" data-lang="pt" onclick="previewLang('pt')">
+                    <div class="lang-card-header">
+                        <div class="lang-flag">🇧🇷</div>
+                        <div>
+                            <div class="lang-name">Portuguese</div>
+                            <div class="lang-native">Português</div>
+                        </div>
+                    </div>
+                    <div class="lang-sample">
+                        <div class="lang-sample-label">Sample</div>
+                        "Identidade hoje, segurança amanhã. Sua identidade digital segura em todas as plataformas sociais."
+                    </div>
+                    <div class="lang-stats">
+                        <div class="lang-stat complete">✓ Full Support</div>
+                        <div class="lang-stat">260M+ Speakers</div>
+                    </div>
+                </div>
+
+                <div class="lang-card" data-lang="yo" onclick="previewLang('yo')">
+                    <div class="lang-card-header">
+                        <div class="lang-flag">🇳🇬</div>
+                        <div>
+                            <div class="lang-name">Yoruba</div>
+                            <div class="lang-native">Yorùbá</div>
+                        </div>
+                    </div>
+                    <div class="lang-sample">
+                        <div class="lang-sample-label">Sample</div>
+                        "Aṣẹ loni, aabo lola. Aṣẹ digitali to ni aabo rẹ lori gbogbo awọn pẹpẹ awujọ."
+                    </div>
+                    <div class="lang-stats">
+                        <div class="lang-stat complete">✓ Full Support</div>
+                        <div class="lang-stat">50M+ Speakers</div>
+                    </div>
+                </div>
+
+                <div class="lang-card" data-lang="ar" onclick="previewLang('ar')">
+                    <div class="lang-card-header">
+                        <div class="lang-flag">🇸🇦</div>
+                        <div>
+                            <div class="lang-name">Arabic</div>
+                            <div class="lang-native">العربية</div>
+                        </div>
+                    </div>
+                    <div class="lang-sample rtl-demo">
+                        <div class="lang-sample-label">Sample</div>
+                        "الهوية اليوم، الأمان غداً. هويتك الرقمية الآمنة عبر جميع منصات التواصل الاجتماعي."
+                    </div>
+                    <div class="lang-stats">
+                        <div class="lang-stat complete">✓ Full Support + RTL</div>
+                        <div class="lang-stat">400M+ Speakers</div>
+                    </div>
+                </div>
+
+                <div class="lang-card" data-lang="zh" onclick="previewLang('zh')">
+                    <div class="lang-card-header">
+                        <div class="lang-flag">🇨🇳</div>
+                        <div>
+                            <div class="lang-name">Chinese</div>
+                            <div class="lang-native">中文</div>
+                        </div>
+                    </div>
+                    <div class="lang-sample">
+                        <div class="lang-sample-label">Sample</div>
+                        "今天的身份，明天的安全。您在所有社交媒体平台上的安全数字身份。"
+                    </div>
+                    <div class="lang-stats">
+                        <div class="lang-stat complete">✓ Full Support</div>
+                        <div class="lang-stat">1.1B+ Speakers</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lang-progress">
+                <h3 style="font-family:'Orbitron',monospace;text-align:center;margin-bottom:1.5rem;">Translation Coverage</h3>
+                <div class="progress-item">
+                    <div class="progress-label">English</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--neon-green)"></div></div>
+                    <div class="progress-value">100%</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">French</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--neon-green)"></div></div>
+                    <div class="progress-value">100%</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Spanish</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--neon-green)"></div></div>
+                    <div class="progress-value">100%</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Portuguese</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--neon-green)"></div></div>
+                    <div class="progress-value">100%</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Yoruba</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--neon-green)"></div></div>
+                    <div class="progress-value">100%</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Arabic</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--neon-green)"></div></div>
+                    <div class="progress-value">100%</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Chinese</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--neon-green)"></div></div>
+                    <div class="progress-value">100%</div>
+                </div>
+            </div>
+
+            <div class="accessibility-section">
+                <h2 class="section-title">Accessibility Features</h2>
+                <div class="access-grid">
+                    <div class="access-card">
+                        <div class="icon">🌗</div>
+                        <h3>High Contrast Mode</h3>
+                        <p>Enhanced contrast ratios for better visibility and readability across all interface elements.</p>
+                        <div class="access-toggle">
+                            <span style="font-size:0.85rem;">Enable</span>
+                            <div class="toggle-switch" onclick="this.classList.toggle('on');showNotification('Info','High contrast mode toggled','info')"></div>
+                        </div>
+                    </div>
+                    <div class="access-card">
+                        <div class="icon">🎬</div>
+                        <h3>Reduced Motion</h3>
+                        <p>Minimize animations and transitions for users sensitive to motion or using screen readers.</p>
+                        <div class="access-toggle">
+                            <span style="font-size:0.85rem;">Enable</span>
+                            <div class="toggle-switch" onclick="this.classList.toggle('on');showNotification('Info','Reduced motion toggled','info')"></div>
+                        </div>
+                    </div>
+                    <div class="access-card">
+                        <div class="icon">⌨️</div>
+                        <h3>Keyboard Navigation</h3>
+                        <p>Full keyboard accessibility with visible focus indicators and logical tab ordering.</p>
+                        <div class="access-toggle">
+                            <span style="font-size:0.85rem;">Active</span>
+                            <div class="toggle-switch on" onclick="showNotification('Info','Keyboard nav always active','info')"></div>
+                        </div>
+                    </div>
+                    <div class="access-card">
+                        <div class="icon">🔊</div>
+                        <h3>Screen Reader Ready</h3>
+                        <p>Semantic HTML, ARIA labels, and alt text ensure compatibility with assistive technologies.</p>
+                        <div class="access-toggle">
+                            <span style="font-size:0.85rem;">Active</span>
+                            <div class="toggle-switch on" onclick="showNotification('Info','Screen reader support active','info')"></div>
+                        </div>
+                    </div>
+                    <div class="access-card">
+                        <div class="icon">🔤</div>
+                        <h3>Font Size Control</h3>
+                        <p>Adjust text size from small to large without breaking layout or functionality.</p>
+                        <div class="access-toggle">
+                            <span style="font-size:0.85rem;">Medium</span>
+                            <div style="display:flex;gap:0.3rem;">
+                                <button class="btn btn-sm btn-outline" style="padding:0.2rem 0.5rem;font-size:0.7rem;" onclick="showNotification('Info','Font size: Small','info')">A-</button>
+                                <button class="btn btn-sm btn-primary" style="padding:0.2rem 0.5rem;font-size:0.7rem;" onclick="showNotification('Info','Font size: Medium','info')">A</button>
+                                <button class="btn btn-sm btn-outline" style="padding:0.2rem 0.5rem;font-size:0.7rem;" onclick="showNotification('Info','Font size: Large','info')">A+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="access-card">
+                        <div class="icon">🌐</div>
+                        <h3>RTL Support</h3>
+                        <p>Full right-to-left layout support for Arabic and other RTL languages with mirrored UI.</p>
+                        <div class="access-toggle">
+                            <span style="font-size:0.85rem;">Auto-detect</span>
+                            <div class="toggle-switch on" onclick="showNotification('Info','RTL auto-detection active','info')"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p style="font-family: 'Orbitron', monospace; font-size: 1.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SMID</p>
+        <p>Identity Today, Safety Tomorrow.</p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">© 2026 SMID Platform. Founded by Oluwatosin Abraham Willoughby. All rights reserved.</p>
+    </footer>
+
+    <div class="cloud-status" onclick="showCloudInfo()">
+        <div class="cloud-dot"></div>
+        <span data-i18n="cloud_sync">Cloud Sync: Active</span>
+        <span id="savedCount" style="color: var(--text-muted); font-size: 0.75rem;">(0 saved)</span>
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+        const langSamples = {
+            en: { text: '<strong>Welcome to SMID</strong><br>Your secure digital identity across all social platforms.', meta: 'English • LTR • Latin script' },
+            fr: { text: '<strong>Bienvenue sur SMID</strong><br>Votre identité numérique sécurisée sur toutes les plateformes sociales.', meta: 'Français • LTR • Latin script' },
+            es: { text: '<strong>Bienvenido a SMID</strong><br>Tu identidad digital segura en todas las plataformas sociales.', meta: 'Español • LTR • Latin script' },
+            pt: { text: '<strong>Bem-vindo ao SMID</strong><br>Sua identidade digital segura em todas as plataformas sociais.', meta: 'Português • LTR • Latin script' },
+            yo: { text: '<strong>Kaabo si SMID</strong><br>Aṣẹ digitali to ni aabo rẹ lori gbogbo awọn pẹpẹ awujọ.', meta: 'Yorùbá • LTR • Latin script' },
+            ar: { text: '<strong style="direction:rtl;display:block;">مرحباً بك في SMID</strong><span style="direction:rtl;display:block;">هويتك الرقمية الآمنة عبر جميع منصات التواصل الاجتماعي.</span>', meta: 'العربية • RTL • Arabic script' },
+            zh: { text: '<strong>欢迎使用 SMID</strong><br>您在所有社交媒体平台上的安全数字身份。', meta: '中文 • LTR • Han script' }
+        };
+
+        function previewLang(lang) {
+            const sample = langSamples[lang];
+            const demoText = document.getElementById('demoText');
+            const demoMeta = document.getElementById('demoMeta');
+
+            demoText.style.opacity = '0';
+            setTimeout(() => {
+                demoText.innerHTML = sample.text;
+                demoMeta.textContent = sample.meta;
+                if (lang === 'ar') {
+                    demoText.classList.add('rtl-demo');
+                    demoText.setAttribute('dir', 'rtl');
+                } else {
+                    demoText.classList.remove('rtl-demo');
+                    demoText.removeAttribute('dir');
+                }
+                demoText.style.opacity = '1';
+            }, 200);
+
+            // Highlight card
+            document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.lang-card[data-lang="${lang}"]`).classList.add('active');
+
+            showNotification('Language Preview', `Switched to ${lang.toUpperCase()}`, 'success');
+        }
+    </script>
+</body>
+</html>
