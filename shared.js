@@ -1,163 +1,393 @@
-// ---------- SECURE AUTH SYSTEM ----------
-// This URL will point to your Kimi AI Python backend once deployed (e.g., Render, Heroku)
-const API_BASE_URL = 'https://api.your-smid-backend.com'; 
+/* ============================================
+   SMID PLATFORM — SHARED JAVASCRIPT
+   Social Media Identification System
+   ============================================ */
 
-const SMIDAuth = {
-    // We no longer store users in local arrays. The Python backend handles the database.
-
-    async signup(name, email, password) {
-        if (!name || !email || !password) {
-            showNotification(SMIDi18n.t('notification_error'), 'Please fill all fields', 'error');
-            return false;
-        }
-        if (password.length < 6) {
-            showNotification(SMIDi18n.t('notification_error'), 'Password must be at least 6 characters', 'error');
-            return false;
-        }
-
-        try {
-            // Send secure POST request to your Python backend
-            const response = await fetch(`${API_BASE_URL}/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                showNotification(SMIDi18n.t('notification_error'), data.message || 'Registration failed', 'error');
-                return false;
-            }
-
-            showNotification(SMIDi18n.t('notification_success'), `Welcome, ${name}! Your account has been created. Please login.`, 'success');
-            setTimeout(() => window.location.href = 'login.html', 1500);
-            return true;
-
-        } catch (error) {
-            console.error("Signup Error:", error);
-            showNotification(SMIDi18n.t('notification_error'), 'Server error. Please try again later.', 'error');
-            return false;
-        }
+// ========== I18N TRANSLATIONS ==========
+const translations = {
+    en: {
+        nav_home: 'Home', nav_categories: 'Categories', nav_register: 'Register',
+        nav_dashboard: 'Dashboard', nav_idcard: 'ID Card', nav_cloud: 'Cloud',
+        nav_founder: 'Founder', nav_login: 'Login', nav_logout: 'Logout',
+        cloud_sync: 'Cloud Sync: Active', cloud_sync_off: 'Cloud Sync: Offline',
+        saved_items: 'Saved Items', no_saved: 'No saved items yet', clear_all: 'Clear All',
+        offline: 'You are offline', online: 'You are back online',
+        loading: 'Loading...', error: 'Error', success: 'Success', warning: 'Warning',
+        submit: 'Submit', cancel: 'Cancel', save: 'Save', delete: 'Delete',
+        back: 'Back', next: 'Next', close: 'Close', copy: 'Copy', share: 'Share',
+        search: 'Search', filter: 'Filter', settings: 'Settings', profile: 'Profile',
+        notifications: 'Notifications', security: 'Security', privacy: 'Privacy',
+        help: 'Help', about: 'About', contact: 'Contact',
+        terms: 'Terms of Service', privacy_policy: 'Privacy Policy',
+        language: 'Language', theme: 'Theme', dark: 'Dark', light: 'Light', neon: 'Neon',
+        required_field: 'This field is required', invalid_email: 'Invalid email address',
+        invalid_phone: 'Invalid phone number', password_mismatch: 'Passwords do not match',
+        registration_success: 'Registration successful!', login_success: 'Login successful!',
+        logout_success: 'Logged out successfully', session_expired: 'Session expired. Please log in again.'
     },
-
-    async login(email, password) {
-        if (!email || !password) {
-            showNotification(SMIDi18n.t('notification_error'), 'Please fill all fields', 'error');
-            return false;
-        }
-
-        try {
-            // Send credentials to backend
-            const response = await fetch(`${API_BASE_URL}/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                showNotification(SMIDi18n.t('notification_error'), data.message || 'Invalid credentials', 'error');
-                return false;
-            }
-
-            // SECURE STORAGE: Save the JWT token and user data to sessionStorage, not localStorage
-            // This ensures data is wiped when the browser tab closes
-            sessionStorage.setItem('smid_token', data.token);
-            sessionStorage.setItem('smid_current_user', JSON.stringify(data.user));
-
-            showNotification(SMIDi18n.t('notification_success'), `Welcome back, ${data.user.name}!`, 'success');
-            updateAuthNav();
-
-            // Redirect to dashboard on success
-            setTimeout(() => window.location.href = 'dashboard.html', 1000);
-            return true;
-
-        } catch (error) {
-            console.error("Login Error:", error);
-            showNotification(SMIDi18n.t('notification_error'), 'Server error. Please try again later.', 'error');
-            return false;
-        }
+    fr: {
+        nav_home: 'Accueil', nav_categories: 'Catégories', nav_register: 'S'inscrire',
+        nav_dashboard: 'Tableau de bord', nav_idcard: 'Carte d'identité', nav_cloud: 'Cloud',
+        nav_founder: 'Fondateur', nav_login: 'Connexion', nav_logout: 'Déconnexion',
+        cloud_sync: 'Sync Cloud: Active', cloud_sync_off: 'Sync Cloud: Hors ligne',
+        saved_items: 'Éléments sauvegardés', no_saved: 'Aucun élément sauvegardé', clear_all: 'Tout effacer',
+        offline: 'Vous êtes hors ligne', online: 'Vous êtes de retour en ligne',
+        loading: 'Chargement...', error: 'Erreur', success: 'Succès', warning: 'Avertissement',
+        submit: 'Soumettre', cancel: 'Annuler', save: 'Sauvegarder', delete: 'Supprimer',
+        back: 'Retour', next: 'Suivant', close: 'Fermer', copy: 'Copier', share: 'Partager',
+        search: 'Rechercher', filter: 'Filtrer', settings: 'Paramètres', profile: 'Profil',
+        notifications: 'Notifications', security: 'Sécurité', privacy: 'Confidentialité',
+        help: 'Aide', about: 'À propos', contact: 'Contact',
+        terms: 'Conditions d'utilisation', privacy_policy: 'Politique de confidentialité',
+        language: 'Langue', theme: 'Thème', dark: 'Sombre', light: 'Clair', neon: 'Néon',
+        required_field: 'Ce champ est requis', invalid_email: 'Adresse email invalide',
+        invalid_phone: 'Numéro de téléphone invalide', password_mismatch: 'Les mots de passe ne correspondent pas',
+        registration_success: 'Inscription réussie !', login_success: 'Connexion réussie !',
+        logout_success: 'Déconnexion réussie', session_expired: 'Session expirée. Veuillez vous reconnecter.'
     },
-
-    logout() {
-        // Wipe all session data
-        sessionStorage.removeItem('smid_token');
-        sessionStorage.removeItem('smid_current_user');
-
-        showNotification(SMIDi18n.t('notification_info'), 'You have been logged out.', 'info');
-        updateAuthNav();
-        setTimeout(() => window.location.href = 'index.html', 500);
+    es: {
+        nav_home: 'Inicio', nav_categories: 'Categorías', nav_register: 'Registrarse',
+        nav_dashboard: 'Panel', nav_idcard: 'Tarjeta de ID', nav_cloud: 'Nube',
+        nav_founder: 'Fundador', nav_login: 'Iniciar sesión', nav_logout: 'Cerrar sesión',
+        cloud_sync: 'Sincronización: Activa', cloud_sync_off: 'Sincronización: Desconectada',
+        saved_items: 'Elementos guardados', no_saved: 'No hay elementos guardados', clear_all: 'Borrar todo',
+        offline: 'Estás desconectado', online: 'Has vuelto a estar en línea',
+        loading: 'Cargando...', error: 'Error', success: 'Éxito', warning: 'Advertencia',
+        submit: 'Enviar', cancel: 'Cancelar', save: 'Guardar', delete: 'Eliminar',
+        back: 'Atrás', next: 'Siguiente', close: 'Cerrar', copy: 'Copiar', share: 'Compartir',
+        search: 'Buscar', filter: 'Filtrar', settings: 'Configuración', profile: 'Perfil',
+        notifications: 'Notificaciones', security: 'Seguridad', privacy: 'Privacidad',
+        help: 'Ayuda', about: 'Acerca de', contact: 'Contacto',
+        terms: 'Términos de servicio', privacy_policy: 'Política de privacidad',
+        language: 'Idioma', theme: 'Tema', dark: 'Oscuro', light: 'Claro', neon: 'Neón',
+        required_field: 'Este campo es obligatorio', invalid_email: 'Correo electrónico inválido',
+        invalid_phone: 'Número de teléfono inválido', password_mismatch: 'Las contraseñas no coinciden',
+        registration_success: '¡Registro exitoso!', login_success: '¡Inicio de sesión exitoso!',
+        logout_success: 'Sesión cerrada correctamente', session_expired: 'Sesión expirada. Por favor, inicia sesión de nuevo.'
     },
-
-    getUser() {
-        return JSON.parse(sessionStorage.getItem('smid_current_user') || 'null');
+    pt: {
+        nav_home: 'Início', nav_categories: 'Categorias', nav_register: 'Registrar',
+        nav_dashboard: 'Painel', nav_idcard: 'Cartão de ID', nav_cloud: 'Nuvem',
+        nav_founder: 'Fundador', nav_login: 'Entrar', nav_logout: 'Sair',
+        cloud_sync: 'Sincronização: Ativa', cloud_sync_off: 'Sincronização: Offline',
+        saved_items: 'Itens salvos', no_saved: 'Nenhum item salvo', clear_all: 'Limpar tudo',
+        offline: 'Você está offline', online: 'Você está online novamente',
+        loading: 'Carregando...', error: 'Erro', success: 'Sucesso', warning: 'Aviso',
+        submit: 'Enviar', cancel: 'Cancelar', save: 'Salvar', delete: 'Excluir',
+        back: 'Voltar', next: 'Próximo', close: 'Fechar', copy: 'Copiar', share: 'Compartilhar',
+        search: 'Pesquisar', filter: 'Filtrar', settings: 'Configurações', profile: 'Perfil',
+        notifications: 'Notificações', security: 'Segurança', privacy: 'Privacidade',
+        help: 'Ajuda', about: 'Sobre', contact: 'Contato',
+        terms: 'Termos de serviço', privacy_policy: 'Política de privacidade',
+        language: 'Idioma', theme: 'Tema', dark: 'Escuro', light: 'Claro', neon: 'Neon',
+        required_field: 'Este campo é obrigatório', invalid_email: 'Email inválido',
+        invalid_phone: 'Número de telefone inválido', password_mismatch: 'As senhas não coincidem',
+        registration_success: 'Registro bem-sucedido!', login_success: 'Login bem-sucedido!',
+        logout_success: 'Logout realizado com sucesso', session_expired: 'Sessão expirada. Por favor, faça login novamente.'
     },
-
-    getToken() {
-        return sessionStorage.getItem('smid_token');
+    yo: {
+        nav_home: 'Ile', nav_categories: 'Àwọn Ẹka', nav_register: 'Forukọsilẹ',
+        nav_dashboard: 'Dasibodu', nav_idcard: 'Kaadi ID', nav_cloud: 'Kuraadu',
+        nav_founder: 'Oludasile', nav_login: 'Wọle', nav_logout: 'Jade',
+        cloud_sync: 'Aṣiṣe Kuraadu: Nṣiṣẹ', cloud_sync_off: 'Aṣiṣe Kuraadu: Laiṣiṣẹ',
+        saved_items: 'Awọn Ohun Ti A Fipamọ', no_saved: 'Ko si ohun ti a fipamọ', clear_all: 'Pa Gbogbo Rẹ',
+        offline: 'O wa laiṣiṣẹ', online: 'O ti pada siṣẹ',
+        loading: 'Nṣe igbasilẹ...', error: 'Aṣiṣe', success: 'Aṣeyọri', warning: 'Ikilo',
+        submit: 'Firanṣẹ', cancel: 'Fagilee', save: 'Fipamọ', delete: 'Paarẹ',
+        back: 'Pada', next: 'Tẹle', close: 'Tii', copy: 'Kọpọ', share: 'Pọpin',
+        search: 'Wa', filter: 'Yan', settings: 'Eto', profile: 'Profaili',
+        notifications: 'Awọn Ifitonileti', security: 'Aabo', privacy: 'Asiri',
+        help: 'Iranlowo', about: 'Nipa', contact: 'Kan si',
+        terms: 'Awọn Ofin Ilo', privacy_policy: 'Eto Asiri',
+        language: 'Ede', theme: 'Akọle', dark: 'Dudu', light: 'Imọlẹ', neon: 'Neon',
+        required_field: 'A nilo aaye yii', invalid_email: 'Imeeli ti ko tọ',
+        invalid_phone: 'Nọmba foonu ti ko tọ', password_mismatch: 'Awọn ọrọ igbaniwọle ko yatọ',
+        registration_success: 'Forukọsilẹ aṣeyọri!', login_success: 'Wiwọle aṣeyọri!',
+        logout_success: 'Jade aṣeyọri', session_expired: 'Akoko ipari. Jọwọ wọle lẹẹkansi.'
     },
-
-    isLoggedIn() {
-        return !!this.getToken();
+    ar: {
+        nav_home: 'الرئيسية', nav_categories: 'الفئات', nav_register: 'تسجيل',
+        nav_dashboard: 'لوحة التحكم', nav_idcard: 'بطاقة الهوية', nav_cloud: 'السحابة',
+        nav_founder: 'المؤسس', nav_login: 'تسجيل الدخول', nav_logout: 'تسجيل الخروج',
+        cloud_sync: 'المزامنة: نشطة', cloud_sync_off: 'المزامنة: غير متصلة',
+        saved_items: 'العناصر المحفوظة', no_saved: 'لا توجد عناصر محفوظة', clear_all: 'مسح الكل',
+        offline: 'أنت غير متصل', online: 'أنت متصل مرة أخرى',
+        loading: 'جاري التحميل...', error: 'خطأ', success: 'نجاح', warning: 'تحذير',
+        submit: 'إرسال', cancel: 'إلغاء', save: 'حفظ', delete: 'حذف',
+        back: 'رجوع', next: 'التالي', close: 'إغلاق', copy: 'نسخ', share: 'مشاركة',
+        search: 'بحث', filter: 'تصفية', settings: 'الإعدادات', profile: 'الملف الشخصي',
+        notifications: 'الإشعارات', security: 'الأمان', privacy: 'الخصوصية',
+        help: 'المساعدة', about: 'حول', contact: 'اتصال',
+        terms: 'شروط الخدمة', privacy_policy: 'سياسة الخصوصية',
+        language: 'اللغة', theme: 'السمة', dark: 'داكن', light: 'فاتح', neon: 'نيون',
+        required_field: 'هذا الحقل مطلوب', invalid_email: 'بريد إلكتروني غير صالح',
+        invalid_phone: 'رقم هاتف غير صالح', password_mismatch: 'كلمات المرور غير متطابقة',
+        registration_success: 'تم التسجيل بنجاح!', login_success: 'تم تسجيل الدخول بنجاح!',
+        logout_success: 'تم تسجيل الخروج بنجاح', session_expired: 'انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.'
+    },
+    zh: {
+        nav_home: '首页', nav_categories: '分类', nav_register: '注册',
+        nav_dashboard: '仪表板', nav_idcard: '身份证', nav_cloud: '云',
+        nav_founder: '创始人', nav_login: '登录', nav_logout: '登出',
+        cloud_sync: '云同步: 活跃', cloud_sync_off: '云同步: 离线',
+        saved_items: '已保存项目', no_saved: '尚无保存项目', clear_all: '全部清除',
+        offline: '您已离线', online: '您已重新在线',
+        loading: '加载中...', error: '错误', success: '成功', warning: '警告',
+        submit: '提交', cancel: '取消', save: '保存', delete: '删除',
+        back: '返回', next: '下一步', close: '关闭', copy: '复制', share: '分享',
+        search: '搜索', filter: '筛选', settings: '设置', profile: '个人资料',
+        notifications: '通知', security: '安全', privacy: '隐私',
+        help: '帮助', about: '关于', contact: '联系',
+        terms: '服务条款', privacy_policy: '隐私政策',
+        language: '语言', theme: '主题', dark: '深色', light: '浅色', neon: '霓虹',
+        required_field: '此字段为必填项', invalid_email: '无效的电子邮件地址',
+        invalid_phone: '无效的电话号码', password_mismatch: '密码不匹配',
+        registration_success: '注册成功!', login_success: '登录成功!',
+        logout_success: '登出成功', session_expired: '会话已过期。请重新登录。'
     }
 };
 
-// ---------- SECURE PAGE INIT & ROUTE GUARD ----------
-function enforceSecurityGuard() {
-    const protectedPages = ['dashboard.html', 'idcard.html'];
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+let currentLang = localStorage.getItem('smid_lang') || 'en';
 
-    // If user is trying to access a protected page but has no token, kick them out
-    if (protectedPages.includes(currentPage) && !SMIDAuth.isLoggedIn()) {
-        window.location.replace('login.html');
-        return false; // Stop execution
-    }
-
-    // If a logged-in user tries to go to the login/register page, send them to dashboard
-    const authPages = ['login.html', 'register.html'];
-    if (authPages.includes(currentPage) && SMIDAuth.isLoggedIn()) {
-        window.location.replace('dashboard.html');
-        return false;
-    }
-    return true;
+// ========== LANGUAGE FUNCTIONS ==========
+function toggleLangDropdown() {
+    const dropdown = document.getElementById('langDropdown');
+    if (dropdown) dropdown.classList.toggle('show');
 }
 
-function initPage() {
-    // 1. Run the security check FIRST
-    if (!enforceSecurityGuard()) return; 
+function selectLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('smid_lang', lang);
+    applyLanguage(lang);
+    const dropdown = document.getElementById('langDropdown');
+    if (dropdown) dropdown.classList.remove('show');
+    const currentLangEl = document.getElementById('currentLang');
+    if (currentLangEl) {
+        const labels = { en: 'English', fr: 'Français', es: 'Español', pt: 'Português', yo: 'Yorùbá', ar: 'العربية', zh: '中文' };
+        currentLangEl.textContent = labels[lang] || 'English';
+    }
+    // Update RTL
+    if (lang === 'ar') {
+        document.documentElement.setAttribute('dir', 'rtl');
+    } else {
+        document.documentElement.setAttribute('dir', 'ltr');
+    }
+    showNotification('Language Changed', `Switched to ${labels[lang] || lang}`, 'success');
+}
 
-    // 2. Proceed with normal page setup
-    SMIDi18n.load();
-    SMIDi18n.apply();
-    loadTheme();
-    updateAuthNav();
-    SMIDCloud.updateBadge();
-    initSearch();
+function applyLanguage(lang) {
+    const t = translations[lang] || translations.en;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+    });
+}
 
-    // Set active nav link
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-            link.classList.add('active');
+function loadLanguage() {
+    const saved = localStorage.getItem('smid_lang');
+    if (saved) {
+        currentLang = saved;
+        applyLanguage(saved);
+        if (saved === 'ar') document.documentElement.setAttribute('dir', 'rtl');
+        const currentLangEl = document.getElementById('currentLang');
+        if (currentLangEl) {
+            const labels = { en: 'English', fr: 'Français', es: 'Español', pt: 'Português', yo: 'Yorùbá', ar: 'العربية', zh: '中文' };
+            currentLangEl.textContent = labels[saved] || 'English';
+        }
+    }
+}
+
+// ========== THEME FUNCTIONS ==========
+function setTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+    if (event && event.target) event.target.classList.add('active');
+    localStorage.setItem('smid_theme', theme);
+}
+
+function loadTheme() {
+    const saved = localStorage.getItem('smid_theme');
+    if (saved) {
+        document.body.setAttribute('data-theme', saved);
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            if ((saved === 'dark' && btn.textContent.includes('🌙')) ||
+                (saved === 'light' && btn.textContent.includes('☀️')) ||
+                (saved === 'neon' && btn.textContent.includes('⚡'))) {
+                btn.classList.add('active');
+            }
+        });
+    } else {
+        document.body.setAttribute('data-theme', 'dark');
+        const firstBtn = document.querySelector('.theme-btn');
+        if (firstBtn) firstBtn.classList.add('active');
+    }
+}
+
+// ========== MOBILE MENU ==========
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const hamburger = document.querySelector('.hamburger');
+    if (menu) menu.classList.toggle('open');
+    if (hamburger) hamburger.classList.toggle('active');
+}
+
+// ========== NOTIFICATIONS ==========
+function showNotification(title, text, type = 'info') {
+    const container = document.getElementById('notificationContainer');
+    if (!container) return;
+    const notif = document.createElement('div');
+    notif.className = `notification ${type}`;
+    const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ', ai: '🤖' };
+    notif.innerHTML = `<div class="notification-title">${icons[type] || 'ℹ'} ${title}</div><div class="notification-text">${text}</div>`;
+    container.appendChild(notif);
+    requestAnimationFrame(() => notif.classList.add('show'));
+    setTimeout(() => {
+        notif.style.transform = 'translateX(400px)';
+        notif.style.opacity = '0';
+        setTimeout(() => notif.remove(), 400);
+    }, 4000);
+}
+
+// ========== PARTICLES ==========
+function initParticles() {
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+            this.size = Math.random() * 2 + 1;
+        }
+        update() {
+            this.x += this.vx; this.y += this.vy;
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+        draw() {
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--primary').trim() || '#6366f1';
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+        }
+    }
+    function init() {
+        particles = [];
+        const count = Math.min(80, (canvas.width * canvas.height) / 15000);
+        for (let i = 0; i < count; i++) particles.push(new Particle());
+    }
+    init();
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 150) {
+                    ctx.strokeStyle = `rgba(99, 102, 241, ${0.15 * (1 - dist / 150)})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+// ========== CLOUD STATUS ==========
+function showCloudInfo() {
+    const saved = JSON.parse(localStorage.getItem('smid_saved') || '[]');
+    showNotification('Cloud Storage', `${saved.length} items saved locally. Sync when online.`, 'info');
+}
+
+function updateSavedCount() {
+    const saved = JSON.parse(localStorage.getItem('smid_saved') || '[]');
+    const el = document.getElementById('savedCount');
+    if (el) el.textContent = `(${saved.length} saved)`;
+}
+
+// ========== AUTH STATE ==========
+function checkAuth() {
+    const user = JSON.parse(localStorage.getItem('smid_user') || 'null');
+    const authNav = document.getElementById('authNav');
+    if (authNav) {
+        if (user) {
+            authNav.innerHTML = `<a href="#" onclick="logout()" style="color:var(--text-muted);text-decoration:none;font-weight:500;font-size:0.9rem;">${translations[currentLang]?.nav_logout || 'Logout'}</a>`;
         } else {
-            link.classList.remove('active');
+            authNav.innerHTML = `<a href="login.html" style="color:var(--text-muted);text-decoration:none;font-weight:500;font-size:0.9rem;">${translations[currentLang]?.nav_login || 'Login'}</a>`;
+        }
+    }
+}
+
+function logout() {
+    localStorage.removeItem('smid_user');
+    showNotification('Logged Out', 'You have been logged out successfully.', 'success');
+    setTimeout(() => window.location.href = 'index.html', 1000);
+}
+
+// ========== PASSWORD STRENGTH ==========
+function checkPasswordStrength(password) {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    return score;
+}
+
+// ========== FORM VALIDATION ==========
+function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validatePhone(phone) {
+    return /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$/.test(phone);
+}
+
+// ========== LOCAL STORAGE HELPERS ==========
+function saveToLocal(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function loadFromLocal(key) {
+    try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+    loadLanguage();
+    initParticles();
+    checkAuth();
+    updateSavedCount();
+
+    // Close dropdowns on outside click
+    document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('langDropdown');
+        const switcher = document.querySelector('.lang-switcher');
+        if (dropdown && switcher && !switcher.contains(e.target)) {
+            dropdown.classList.remove('show');
         }
     });
 
-    // Set current language display
-    const currentLang = document.getElementById('currentLang');
-    if (currentLang) {
-        const names = { en: 'English', fr: 'Français', es: 'Español', pt: 'Português', yo: 'Yorùbá', ar: 'العربية', zh: '中文' };
-        currentLang.textContent = names[SMIDi18n.current] || 'English';
-    }
-
-    // Mark active lang option
-    document.querySelectorAll('.lang-option').forEach(opt => {
-        opt.classList.toggle('active', opt.getAttribute('data-lang') === SMIDi18n.current);
+    // Online/offline detection
+    window.addEventListener('online', () => {
+        showNotification('Online', translations[currentLang]?.online || 'You are back online', 'success');
+        const cloudStatus = document.querySelector('.cloud-status span');
+        if (cloudStatus) cloudStatus.textContent = translations[currentLang]?.cloud_sync || 'Cloud Sync: Active';
     });
-}
-
-document.addEventListener('DOMContentLoaded', initPage);
+    window.addEventListener('offline', () => {
+        showNotification('Offline', translations[currentLang]?.offline || 'You are offline', 'warning');
+        const cloudStatus = document.querySelector('.cloud-status span');
+        if (cloudStatus) cloudStatus.textContent = translations[currentLang]?.cloud_sync_off || 'Cloud Sync: Offline';
+    });
+});
